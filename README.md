@@ -84,5 +84,4 @@ Pull requests run Biome lint/format checks, typecheck and production build on No
 ## Testing strategy
 
 As the flows become real, add focused unit tests for validation and domain rules, database integration tests against an isolated PostgreSQL service, and Playwright browser coverage for reader navigation, keyboard access, newsletter validation/consent, and the editor publish flow. Keep payment webhook signature/idempotency cases in integration tests. CI should run unit and integration suites plus an accessibility smoke check; production smoke checks should verify homepage, sitemap, database readiness and newsletter provider health. This initial scaffold does not include a test runner or test suite yet.
-#   t h e - a c c i d e n t a l - m a n  
- 
+#   t h e - a c c i d e n t a l - m a n 
