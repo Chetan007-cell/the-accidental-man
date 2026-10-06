@@ -31,7 +31,10 @@ export default function JournalPage() {
                   sizes="(max-width: 700px) 100vw, 33vw"
                 />
               </div>
-              <p className="eyebrow">{story.category} <span>— {story.readingTimeMinutes} MIN READ</span></p>
+              <p className="eyebrow">
+                {story.category}{" "}
+                <span>— {story.readingTimeMinutes} MIN READ</span>
+              </p>
               <h2>{story.title}</h2>
               <p>{story.excerpt}</p>
             </Link>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const CONSENT_KEY = "tam-analytics-consent-v1";
 const MEASUREMENT_ID =
@@ -108,13 +108,16 @@ export function AnalyticsConsent() {
 
   return (
     <>
-      {resolved && choice === "accepted" && (
-        <GoogleAnalytics />
-      )}
+      {resolved && choice === "accepted" && <GoogleAnalytics />}
       {resolved && open ? (
-        <aside className="analytics-consent" aria-labelledby="analytics-title" role="region">
+        <section
+          className="analytics-consent"
+          aria-labelledby="analytics-title"
+        >
           <div className="analytics-consent-copy">
-            <p className="eyebrow" id="analytics-title">YOUR PRIVACY, YOUR CALL</p>
+            <p className="eyebrow" id="analytics-title">
+              YOUR PRIVACY, YOUR CALL
+            </p>
             <p>
               May we use Google Analytics to understand page visits and improve
               the journal? Analytics stays off unless you allow it. You can
@@ -126,11 +129,15 @@ export function AnalyticsConsent() {
             <button type="button" onClick={() => saveChoice("declined")}>
               Reject analytics
             </button>
-            <button type="button" className="button" onClick={() => saveChoice("accepted")}>
+            <button
+              type="button"
+              className="button"
+              onClick={() => saveChoice("accepted")}
+            >
               Allow analytics
             </button>
           </div>
-        </aside>
+        </section>
       ) : resolved && choice !== "accepted" ? (
         <button
           type="button"

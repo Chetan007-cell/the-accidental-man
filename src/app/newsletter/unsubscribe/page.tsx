@@ -18,7 +18,11 @@ export default async function UnsubscribePage({
   return (
     <main id="main" className="page-wrap">
       <p className="eyebrow">THE ACCIDENTAL MAN / NEWSLETTER</p>
-      <h1 className="page-title">Your inbox,<br /><em>your choice.</em></h1>
+      <h1 className="page-title">
+        Your inbox,
+        <br />
+        <em>your choice.</em>
+      </h1>
       <p className="page-intro">
         {validToken
           ? "Confirm below and we’ll stop sending newsletter emails to this address."
@@ -27,9 +31,17 @@ export default async function UnsubscribePage({
       {validToken ? (
         <UnsubscribeForm token={token} />
       ) : (
-        <p>Contact <a href="mailto:hello@theaccidentalman.com">hello@theaccidentalman.com</a>.</p>
+        <p>
+          Contact{" "}
+          <a href="mailto:hello@theaccidentalman.com">
+            hello@theaccidentalman.com
+          </a>
+          .
+        </p>
       )}
-      <p className="unsubscribe-home"><Link href="/">Return to the journal</Link></p>
+      <p className="unsubscribe-home">
+        <Link href="/">Return to the journal</Link>
+      </p>
     </main>
   );
 }

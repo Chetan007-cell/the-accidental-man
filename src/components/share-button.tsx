@@ -12,7 +12,8 @@ export function ShareButton({ title }: { title: string }) {
         await navigator.share({ title, url });
         return;
       } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
+        if (error instanceof DOMException && error.name === "AbortError")
+          return;
       }
     }
     try {
@@ -28,7 +29,9 @@ export function ShareButton({ title }: { title: string }) {
       <button type="button" className="text-link" onClick={share}>
         Share this note <span aria-hidden="true">↗</span>
       </button>
-      <span className="share-message" aria-live="polite">{message}</span>
+      <span className="share-message" aria-live="polite">
+        {message}
+      </span>
     </div>
   );
 }

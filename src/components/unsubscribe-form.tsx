@@ -3,7 +3,9 @@
 import { useState } from "react";
 
 export function UnsubscribeForm({ token }: { token: string }) {
-  const [state, setState] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [state, setState] = useState<"idle" | "loading" | "success" | "error">(
+    "idle",
+  );
 
   async function unsubscribe() {
     setState("loading");
@@ -21,8 +23,17 @@ export function UnsubscribeForm({ token }: { token: string }) {
 
   return (
     <div className="unsubscribe-action">
-      <button type="button" className="button" onClick={unsubscribe} disabled={state === "loading" || state === "success"}>
-        {state === "loading" ? "Updating…" : state === "success" ? "Unsubscribed" : "Unsubscribe"}
+      <button
+        type="button"
+        className="button"
+        onClick={unsubscribe}
+        disabled={state === "loading" || state === "success"}
+      >
+        {state === "loading"
+          ? "Updating…"
+          : state === "success"
+            ? "Unsubscribed"
+            : "Unsubscribe"}
       </button>
       <p aria-live="polite">
         {state === "success"

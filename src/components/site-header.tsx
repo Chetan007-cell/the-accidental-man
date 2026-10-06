@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,9 @@ export function SiteHeader() {
 
   // Close menu on route change
   useEffect(() => {
-    setIsOpen(false);
+    if (pathname) {
+      setIsOpen(false);
+    }
   }, [pathname]);
 
   // Lock body scroll when mobile menu is open
@@ -50,16 +52,14 @@ export function SiteHeader() {
             unoptimized
             className="site-logo"
           />
-          <span className="wordmark">
-            THE ACCIDENTAL MAN
-          </span>
+          <span className="wordmark">THE ACCIDENTAL MAN</span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="site-nav-desktop" aria-label="Main navigation">
           <Link href="/journal">Journal</Link>
-          <a href="/#about">About</a>
-          <a href="/#newsletter">Letters</a>
+          <Link href="/#about">About</Link>
+          <Link href="/#newsletter">Letters</Link>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -93,12 +93,12 @@ export function SiteHeader() {
             >
               Journal
             </Link>
-            <a href="/#about" onClick={() => setIsOpen(false)}>
+            <Link href="/#about" onClick={() => setIsOpen(false)}>
               About
-            </a>
-            <a href="/#newsletter" onClick={() => setIsOpen(false)}>
+            </Link>
+            <Link href="/#newsletter" onClick={() => setIsOpen(false)}>
               Letters
-            </a>
+            </Link>
             <Link
               href="/privacy"
               className={pathname === "/privacy" ? "active" : ""}

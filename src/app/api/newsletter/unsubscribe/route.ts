@@ -5,13 +5,18 @@ import { getDb } from "@/lib/db";
 import { subscribers } from "@/lib/db/schema";
 
 export const runtime = "nodejs";
-const bodySchema = z.object({ token: z.string().regex(/^[a-f0-9]{64}$/i) }).strict();
+const bodySchema = z
+  .object({ token: z.string().regex(/^[a-f0-9]{64}$/i) })
+  .strict();
 
 export async function POST(request: Request) {
   const expectedOrigin = process.env.APP_URL;
   const origin = request.headers.get("origin");
   if (!expectedOrigin) {
-    return NextResponse.json({ error: "Service is not configured" }, { status: 503 });
+    return NextResponse.json(
+      { error: "Service is not configured" },
+      { status: 503 },
+    );
   }
   if (origin) {
     try {
@@ -22,12 +27,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid request" }, { status: 403 });
     }
   }
-  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+  if (
+    !request.headers
+      .get("content-type")
+      ?.toLowerCase()
+      .startsWith("application/json")
+  ) {
     return NextResponse.json({ error: "Invalid request" }, { status: 415 });
   }
   const contentLength = Number(request.headers.get("content-length") ?? "0");
   if (contentLength > 1024) {
-    return NextResponse.json({ error: "Request is too large" }, { status: 413 });
+    return NextResponse.json(
+      { error: "Request is too large" },
+      { status: 413 },
+    );
   }
 
   let input: unknown;
@@ -48,6 +61,9 @@ export async function POST(request: Request) {
       .where(eq(subscribers.unsubscribeToken, parsed.data.token));
     return NextResponse.json({ ok: true });
   } catch {
-    return NextResponse.json({ error: "Unable to update subscription" }, { status: 503 });
+    return NextResponse.json(
+      { error: "Unable to update subscription" },
+      { status: 503 },
+    );
   }
 }

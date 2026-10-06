@@ -42,8 +42,10 @@ export default async function StoryPage({
   return (
     <main id="main" className="article-wrap">
       <nav className="breadcrumbs" aria-label="Breadcrumb">
-        <Link href="/">Home</Link><span aria-hidden="true">/</span>
-        <Link href="/journal">Journal</Link><span aria-hidden="true">/</span>
+        <Link href="/">Home</Link>
+        <span aria-hidden="true">/</span>
+        <Link href="/journal">Journal</Link>
+        <span aria-hidden="true">/</span>
         <span aria-current="page">Foundations</span>
       </nav>
       <p className="eyebrow article-category">{story.category}</p>
@@ -67,24 +69,37 @@ export default async function StoryPage({
       </div>
       <article className="prose">
         <p className="eyebrow">A FIELD NOTE FROM THE ACCIDENTAL MAN</p>
-        {story.introduction.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        {story.introduction.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
         {story.sections.map((section) => (
           <section className="article-section" key={section.heading}>
             <h2>{section.heading}</h2>
-            {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {section.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </section>
         ))}
-        <div className="article-share"><ShareButton title={story.title} /></div>
+        <div className="article-share">
+          <ShareButton title={story.title} />
+        </div>
       </article>
       <section className="newsletter article-newsletter" id="newsletter">
         <div>
           <p className="eyebrow">A LETTER, NOW AND THEN</p>
-          <h2>Keep becoming.<br /><em>We’ll write now and then.</em></h2>
+          <h2>
+            Keep becoming.
+            <br />
+            <em>We’ll write now and then.</em>
+          </h2>
           <p>Occasional notes from the journal. No noise, and no pressure.</p>
         </div>
         <NewsletterForm />
       </section>
-      <nav className="article-backlinks" aria-label="More from The Accidental Man">
+      <nav
+        className="article-backlinks"
+        aria-label="More from The Accidental Man"
+      >
         <Link href="/journal">← Back to the journal</Link>
         <Link href="/">The Accidental Man home</Link>
       </nav>
