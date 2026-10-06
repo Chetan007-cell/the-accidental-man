@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const CONSENT_KEY = "tam-analytics-consent-v1";
 const MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-4PD1WZ0YC9";
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-XZ3NLG1Y0T";
 
 declare global {
   interface Window {
