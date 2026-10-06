@@ -3,9 +3,9 @@
 import { type FormEvent, useState } from "react";
 
 export function NewsletterForm() {
-  const [state, setState] = useState<"idle" | "loading" | "success" | "error">(
-    "idle",
-  );
+  const [state, setState] = useState<
+    "idle" | "loading" | "success" | "email-pending" | "error"
+  >("idle");
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState("loading");
@@ -17,8 +17,13 @@ export function NewsletterForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      setState(response.ok ? "success" : "error");
-      if (response.ok) form.reset();
+      const result = await response.json().catch(() => null);
+      if (response.ok) {
+        setState(result?.emailSent === false ? "email-pending" : "success");
+        form.reset();
+      } else {
+        setState("error");
+      }
     } catch {
       setState("error");
     }
@@ -56,10 +61,12 @@ export function NewsletterForm() {
       />
       <p className="form-message" aria-live="polite">
         {state === "success"
-          ? "Thanks. Check your inbox to confirm your subscription."
-          : state === "error"
-            ? "We couldn’t save that just now. Please try again."
-            : "We respect your inbox. Unsubscribe whenever you like."}
+          ? "Thanks for joining us. Your welcome email is on its way."
+          : state === "email-pending"
+            ? "You’re subscribed, but we couldn’t send the welcome email yet. Please try again shortly."
+            : state === "error"
+              ? "We couldn’t save that just now. Please try again."
+              : "We respect your inbox. Unsubscribe whenever you like."}
       </p>
     </form>
   );

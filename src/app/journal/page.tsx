@@ -19,7 +19,7 @@ export default function JournalPage() {
       <p className="page-intro">
         Perspective, personal style, care and everything we learn along the way.
       </p>
-      <div className="story-grid journal-grid">
+      <div className="story-grid journal-grid journal-grid-featured">
         {stories.map((story) => (
           <article className="story-card" key={story.slug}>
             <Link href={`/journal/${story.slug}`}>
@@ -31,7 +31,7 @@ export default function JournalPage() {
                   sizes="(max-width: 700px) 100vw, 33vw"
                 />
               </div>
-              <p className="eyebrow">{story.category}</p>
+              <p className="eyebrow">{story.category} <span>— {story.readingTimeMinutes} MIN READ</span></p>
               <h2>{story.title}</h2>
               <p>{story.excerpt}</p>
             </Link>

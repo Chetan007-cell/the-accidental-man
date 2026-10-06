@@ -8,8 +8,8 @@ export default function HomePage() {
     <main id="main">
       <section className="hero">
         <Image
-          src="/images/editorial-morning.svg"
-          alt="A quiet morning light falling into a room"
+          src="/images/home-hero.webp"
+          alt="A man pauses at a window as morning light reaches the room"
           fill
           priority
           sizes="100vw"
@@ -55,7 +55,7 @@ export default function HomePage() {
             All stories <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="story-grid">
+        <div className="story-grid story-grid-featured">
           {stories.map((story) => (
             <article className="story-card" key={story.slug}>
               <Link

@@ -20,6 +20,10 @@ export const subscribers = pgTable("subscribers", {
   status: subscriberStatus("status").notNull().default("pending"),
   consentAt: timestamp("consent_at", { withTimezone: true }),
   consentSource: varchar("consent_source", { length: 100 }),
+  welcomeEmailSentAt: timestamp("welcome_email_sent_at", { withTimezone: true }),
+  unsubscribeToken: varchar("unsubscribe_token", { length: 64 })
+    .notNull()
+    .unique(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

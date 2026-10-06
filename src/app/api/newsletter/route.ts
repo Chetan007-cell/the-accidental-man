@@ -1,7 +1,10 @@
+import { randomBytes } from "node:crypto";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
 import { subscribers } from "@/lib/db/schema";
+import { sendWelcomeEmail } from "@/lib/email/send-welcome-email";
 import { logError } from "@/lib/logger";
 
 export const runtime = "nodejs";
@@ -16,7 +19,11 @@ const bodySchema = z
 export async function POST(request: Request) {
   const requestId = crypto.randomUUID();
   const origin = request.headers.get("origin");
-  const expectedOrigin = process.env.APP_URL;
+  const expectedOrigin =
+    process.env.APP_URL ??
+    (process.env.NODE_ENV === "production"
+      ? undefined
+      : new URL(request.url).origin);
   if (!expectedOrigin) {
     return NextResponse.json(
       { error: "Service is not configured" },
@@ -61,16 +68,55 @@ export async function POST(request: Request) {
   if (parsed.data.website) return NextResponse.json({ ok: true });
   try {
     const email = parsed.data.email.toLowerCase();
-    await getDb()
+    const database = getDb();
+    const [subscriber] = await database
       .insert(subscribers)
       .values({
         email,
-        status: "pending",
+        status: "active",
         consentAt: new Date(),
         consentSource: "website-newsletter",
+        unsubscribeToken: randomBytes(32).toString("hex"),
       })
-      .onConflictDoNothing();
-    return NextResponse.json({ ok: true });
+      .onConflictDoUpdate({
+        target: subscribers.email,
+        set: {
+          status: "active",
+          consentAt: new Date(),
+          consentSource: "website-newsletter",
+          updatedAt: new Date(),
+        },
+      })
+      .returning({
+        id: subscribers.id,
+        email: subscribers.email,
+        unsubscribeToken: subscribers.unsubscribeToken,
+        welcomeEmailSentAt: subscribers.welcomeEmailSentAt,
+      });
+
+    if (!subscriber) throw new Error("subscriber_record_missing");
+    if (subscriber.welcomeEmailSentAt) {
+      return NextResponse.json({ ok: true, emailSent: true });
+    }
+
+    try {
+      await sendWelcomeEmail({
+        email: subscriber.email,
+        unsubscribeToken: subscriber.unsubscribeToken,
+        subscriberId: subscriber.id,
+      });
+      await database
+        .update(subscribers)
+        .set({ welcomeEmailSentAt: new Date(), updatedAt: new Date() })
+        .where(eq(subscribers.id, subscriber.id));
+      return NextResponse.json({ ok: true, emailSent: true });
+    } catch (error) {
+      logError("newsletter_welcome_email_failed", requestId, error);
+      return NextResponse.json(
+        { ok: true, emailSent: false },
+        { status: 202, headers: { "X-Request-ID": requestId } },
+      );
+    }
   } catch (error) {
     logError("newsletter_signup_failed", requestId, error);
     return NextResponse.json(
