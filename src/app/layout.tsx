@@ -1,10 +1,18 @@
-import type { Metadata } from "next";
-import Image from "next/image";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { AnalyticsConsent } from "@/components/analytics-consent";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const siteUrl = process.env.APP_URL ?? "https://theaccidentalman.com";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#000000",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -30,27 +38,7 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <header className="site-header">
-          <Link href="/" className="site-brand">
-            <Image
-              src="/images/logo-mark.png"
-              alt="The Accidental Man Logo"
-              width={58}
-              height={34}
-              priority
-              unoptimized
-              className="site-logo"
-            />
-            <span className="wordmark">
-              THE ACCIDENTAL MAN
-            </span>
-          </Link>
-          <nav aria-label="Main navigation">
-            <Link href="/journal">Journal</Link>
-            <a href="/#about">About</a>
-            <a href="/#newsletter">Letters</a>
-          </nav>
-        </header>
+        <SiteHeader />
         {children}
         <footer className="site-footer">
           <div className="footer-brand">
