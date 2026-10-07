@@ -9,7 +9,7 @@ export const stories = [
     date: "6 OCTOBER 2026",
     publishedAt: "2026-10-06",
     readingTimeMinutes: 5,
-    image: "/images/journal-coast.webp",
+    image: "/images/article-reflection.webp",
     imageAlt: "A man walking along a quiet, rocky coastline",
     articleImage: "/images/article-reflection.webp",
     articleImageAlt: "An open notebook and pen on a sunlit wooden table",
