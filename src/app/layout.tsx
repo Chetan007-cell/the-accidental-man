@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
-import { AnalyticsConsent } from "@/components/analytics-consent";
+import Script from "next/script";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const siteUrl = process.env.APP_URL ?? "https://theaccidentalman.com";
+const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-XZ3NLG1Y0T";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -34,6 +36,20 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
+      </head>
       <body>
         <a className="skip-link" href="#main">
           Skip to content
@@ -119,7 +135,6 @@ export default function RootLayout({
           </nav>
           <small>© {new Date().getFullYear()} The Accidental Man</small>
         </footer>
-        <AnalyticsConsent />
       </body>
     </html>
   );
