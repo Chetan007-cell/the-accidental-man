@@ -1,7 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { POST } from "@/app/api/newsletter/route";
 
 describe("API: /api/newsletter", () => {
+  beforeAll(() => {
+    process.env.APP_URL = "http://localhost:3000";
+  });
+
   const baseHeaders = {
     "content-type": "application/json",
     origin: "http://localhost:3000",

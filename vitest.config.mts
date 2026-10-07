@@ -5,6 +5,9 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
+    env: {
+      APP_URL: "http://localhost:3000",
+    },
   },
   resolve: {
     alias: {
