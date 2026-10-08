@@ -46,7 +46,7 @@ export default async function StoryPage({
         <span aria-hidden="true">/</span>
         <Link href="/journal">Journal</Link>
         <span aria-hidden="true">/</span>
-        <span aria-current="page">Foundations</span>
+        <span aria-current="page">{story.category}</span>
       </nav>
       <p className="eyebrow article-category">{story.category}</p>
       <h1>{story.title}</h1>
