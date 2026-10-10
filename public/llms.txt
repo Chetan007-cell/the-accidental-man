@@ -1,0 +1,33 @@
+# The Accidental Man
+
+> A factory for the modern man. A practical, thoughtful publication and platform helping men learn, reflect, practice, maintain, and evolve across everyday life. A man isn't born. He's built.
+
+## Core Philosophy: Three Tenets
+- **01 Become**: Starting where you are without shame. Unlearning inherited noise, facing tough questions, and accepting that being unfinished is where real growth begins.
+- **02 Maintain**: The daily architecture. Grounded routines, physical vitality, mental clarity, emotional literacy, and showing up for the commitments you made.
+- **03 Evolve**: Expanding your capacity over time. Deepening your craft, cultivating dependable relationships, and defining a life you respect.
+
+## The Nine Pillars
+1. **Mind**: Learning, attention, habits, judgment, confidence, and mental clarity.
+2. **Emotions**: Emotional literacy, resilience, self-respect, asking for help, and coping skills.
+3. **Body**: Movement, strength, sleep, nutrition, health, and sustainable physical care.
+4. **Spirit & Purpose**: Values, meaning, identity, reflection, and guiding principles.
+5. **Grooming**: Simple, inclusive routines, practical self-care, and daily maintenance.
+6. **Style**: Fit, function, self-expression, and dressing for real situations and budgets.
+7. **Career & Money**: Work, craft, financial fundamentals, decisions, and long-term stability.
+8. **Relationships**: Friendship, family, partnership, communication, boundaries, and care.
+9. **Life**: Home, time, responsibility, transitions, culture, leisure, and whole living.
+
+## Flagship Essays & Field Notes
+- [A Man Isn’t Born. He’s Built](https://theaccidentalman.com/journal/a-man-isnt-born-hes-built): Becoming a man is not a finish line or a set of rules. It is the quiet, lifelong work of choosing the person you want to be. (Category: Foundations, 5 min read)
+- [Are You Celebrating Yourself, or Seeking Validation From Others?](https://theaccidentalman.com/journal/celebrating-yourself-or-seeking-validation): Two people can do exactly the same thing for completely different reasons. The real question is why you're doing it. (Category: Mind & Self-Awareness, 5 min read)
+
+## Primary Pages & Resources
+- [Home](https://theaccidentalman.com/): Overview of brand philosophy, three tenets, nine pillars, and newsletter.
+- [The Journal](https://theaccidentalman.com/journal): Collection of field notes, reflections, and essays.
+- [Privacy Notice](https://theaccidentalman.com/privacy): Data protection, optional analytics consent, and newsletter preferences.
+- [Full LLM Context](https://theaccidentalman.com/llms-full.txt): Comprehensive background, brand creed, and complete essay texts.
+
+## Editorial Contact
+- Editorial Desk: hello@theaccidentalman.com
+- Publisher: The Accidental Man

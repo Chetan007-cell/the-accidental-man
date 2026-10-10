@@ -39,6 +39,19 @@ export function SiteHeader() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
 
+  const handleAnchorClick = (hash: string) => {
+    setIsOpen(false);
+    if (typeof window !== "undefined" && pathname === "/") {
+      const id = hash.replace("#", "");
+      const target = document.getElementById(id);
+      if (target) {
+        requestAnimationFrame(() => {
+          target.scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    }
+  };
+
   return (
     <>
       <header className="site-header">
@@ -58,7 +71,8 @@ export function SiteHeader() {
         {/* Desktop Navigation */}
         <nav className="site-nav-desktop" aria-label="Main navigation">
           <Link href="/journal">Journal</Link>
-          <Link href="/#about">About</Link>
+          <Link href="/#pillars">Pillars</Link>
+          <Link href="/#about">Philosophy</Link>
           <Link href="/#newsletter">Letters</Link>
         </nav>
 
@@ -88,15 +102,24 @@ export function SiteHeader() {
           <nav className="mobile-nav-links" aria-label="Mobile navigation">
             <Link
               href="/journal"
-              className={pathname.startsWith("/journal") ? "active" : ""}
+              className={pathname?.startsWith("/journal") ? "active" : ""}
               onClick={() => setIsOpen(false)}
             >
               Journal
             </Link>
-            <Link href="/#about" onClick={() => setIsOpen(false)}>
-              About
+            <Link
+              href="/#pillars"
+              onClick={() => handleAnchorClick("#pillars")}
+            >
+              Pillars
             </Link>
-            <Link href="/#newsletter" onClick={() => setIsOpen(false)}>
+            <Link href="/#about" onClick={() => handleAnchorClick("#about")}>
+              Philosophy
+            </Link>
+            <Link
+              href="/#newsletter"
+              onClick={() => handleAnchorClick("#newsletter")}
+            >
               Letters
             </Link>
             <Link

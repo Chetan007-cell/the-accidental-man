@@ -1,11 +1,23 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { NewsletterForm } from "@/components/newsletter-form";
+import { PillarsSection } from "@/components/pillars-section";
 import { stories } from "@/lib/content";
 
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
+
 export default function HomePage() {
+  const foundationalStory =
+    stories.find((s) => s.slug === "a-man-isnt-born-hes-built") ?? stories[0];
+
   return (
     <main id="main">
+      {/* Editorial Hero */}
       <section className="hero">
         <Image
           src="/images/home-hero.webp"
@@ -17,38 +29,119 @@ export default function HomePage() {
         />
         <div className="hero-shade" />
         <div className="hero-copy">
-          <p className="eyebrow">A JOURNAL FOR THE IN-BETWEEN</p>
+          <p className="eyebrow">A FACTORY FOR THE MODERN MAN</p>
           <h1>
             A man isn’t born.
             <br />
-            He’s built.
+            <em>He’s built.</em>
           </h1>
           <p className="hero-dek">
-            Notes on growing into yourself—one honest day at a time.
+            A practical, thoughtful space helping men learn, reflect, practice,
+            maintain, and evolve across everyday life.
           </p>
-          <Link className="button button-light" href="/journal">
-            Read the journal <span aria-hidden="true">↗</span>
-          </Link>
+          <div className="hero-actions">
+            <Link className="button button-light" href="/journal">
+              Read the journal <span aria-hidden="true">↗</span>
+            </Link>
+            <Link className="button button-outline-light" href="#pillars">
+              Explore the 9 Pillars <span aria-hidden="true">↓</span>
+            </Link>
+          </div>
         </div>
         <span className="hero-index">VOL. 01&nbsp; / &nbsp;THE BEGINNING</span>
       </section>
+
+      {/* Brand Philosophy: Become, Maintain, Evolve */}
       <section className="intro section-wrap" id="about">
-        <p className="eyebrow">A PLACE TO BEGIN</p>
+        <p className="eyebrow">BRAND PHILOSOPHY</p>
         <h2>
           No finished versions.
           <br />
-          <em>Just the work of becoming.</em>
+          <em>Just the quiet work of becoming.</em>
         </h2>
         <p className="intro-copy">
-          A thoughtful journal about the things that shape us: perspective,
-          personal style, care, relationships and the life we’re figuring out as
-          we go.
+          Manhood is not a fixed status, performance, or checklist. It is built
+          through choices, habits, responsibility, self-knowledge,
+          relationships, and the willingness to keep learning. Men do not need
+          to be perfect to begin; they need useful tools and room to grow.
         </p>
+
+        <div className="tenets-grid">
+          <div className="tenet-card">
+            <span className="tenet-num">01</span>
+            <h3>Become</h3>
+            <p>
+              Starting where you are without shame. Unlearning inherited habits,
+              facing tough questions, and accepting that being unfinished is
+              where real growth begins.
+            </p>
+          </div>
+          <div className="tenet-card">
+            <span className="tenet-num">02</span>
+            <h3>Maintain</h3>
+            <p>
+              The daily architecture. Grounded routines, physical vitality,
+              mental clarity, emotional literacy, and showing up for the
+              commitments you made.
+            </p>
+          </div>
+          <div className="tenet-card">
+            <span className="tenet-num">03</span>
+            <h3>Evolve</h3>
+            <p>
+              Expanding your capacity over time. Deepening your craft,
+              cultivating dependable relationships, and defining a life you
+              respect.
+            </p>
+          </div>
+        </div>
       </section>
-      <section className="journal section-wrap">
+
+      {/* Foundational Essay Spotlight */}
+      {foundationalStory && (
+        <section className="foundational-spotlight section-wrap">
+          <div className="foundational-card">
+            <div className="foundational-image-wrap">
+              <Image
+                src={foundationalStory.image}
+                alt={foundationalStory.imageAlt}
+                fill
+                sizes="(max-width: 900px) 100vw, 50vw"
+                className="foundational-image"
+              />
+            </div>
+            <div className="foundational-content">
+              <div className="foundational-badge">
+                FOUNDATIONAL MANIFESTO · VOL. 01
+              </div>
+              <p className="eyebrow">
+                {foundationalStory.category} —{" "}
+                {foundationalStory.readingTimeMinutes} MIN READ
+              </p>
+              <h2>{foundationalStory.title}</h2>
+              <p className="foundational-excerpt">
+                {foundationalStory.excerpt}
+              </p>
+              <p className="foundational-quote">
+                “Becoming a man is not about having everything figured out; it
+                is about becoming more willing and able to figure things out.”
+              </p>
+              <Link
+                href={`/journal/${foundationalStory.slug}`}
+                className="button button-editorial"
+              >
+                Read the foundational essay <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Journal Stories Section */}
+      <section className="journal section-wrap" id="journal">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">FIELD NOTES</p>
+            <p className="eyebrow">FIELD NOTES & ESSAYS</p>
             <h2>From the journal</h2>
           </div>
           <Link className="text-link" href="/journal">
@@ -65,30 +158,82 @@ export default function HomePage() {
                 <div className="story-image">
                   <Image
                     src={story.image}
-                    alt=""
+                    alt={story.imageAlt || ""}
                     fill
-                    sizes="(max-width: 700px) 100vw, 33vw"
+                    sizes="(max-width: 700px) 100vw, 50vw"
                   />
+                  <span className="story-read-badge">
+                    {story.readingTimeMinutes} min
+                  </span>
                 </div>
-                <p className="eyebrow">
-                  {story.category} <span>— {story.date}</span>
-                </p>
-                <h3>{story.title}</h3>
-                <p>{story.excerpt}</p>
+                <div className="story-card-body">
+                  <p className="eyebrow">
+                    {story.category} <span>— {story.date}</span>
+                  </p>
+                  <h3>{story.title}</h3>
+                  <p>{story.excerpt}</p>
+                  <span className="story-cta">
+                    Read essay <span aria-hidden="true">↗</span>
+                  </span>
+                </div>
               </Link>
             </article>
           ))}
         </div>
       </section>
+
+      {/* The 9 Pillars / Content Universe */}
+      <PillarsSection />
+
+      {/* Brand Promise / Editorial Creed */}
+      <section className="creed-section section-wrap">
+        <div className="creed-card">
+          <p className="eyebrow">OUR EDITORIAL COMMITMENT</p>
+          <blockquote>
+            “Every piece should leave the reader with at least one of these: a
+            clearer perspective, a useful next step, a question worth
+            considering, or the feeling that growth is possible.”
+          </blockquote>
+          <div className="creed-points">
+            <div className="creed-point">
+              <strong>Considered & Human</strong>
+              <span>
+                Grounded in real life, not alpha posturing or empty hustle
+                culture.
+              </span>
+            </div>
+            <div className="creed-point">
+              <strong>Practical Guidance</strong>
+              <span>
+                Proportionate steps that respect your intelligence, time, and
+                circumstance.
+              </span>
+            </div>
+            <div className="creed-point">
+              <strong>Room to Grow</strong>
+              <span>
+                A welcoming place to ask basic questions and build quiet
+                confidence.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Letters / Newsletter */}
       <section className="newsletter" id="newsletter">
-        <div>
+        <div className="newsletter-copy">
           <p className="eyebrow">A LETTER, NOW AND THEN</p>
           <h2>
             Good things take
             <br />
             <em>a little becoming.</em>
           </h2>
-          <p>Occasional notes from the journal. No noise, and no pressure.</p>
+          <p>
+            Occasional dispatches from the journal. Thoughtful reflections,
+            field notes, and practical guidance for building a fuller life. No
+            noise, no spam, and no pressure.
+          </p>
         </div>
         <NewsletterForm />
       </section>

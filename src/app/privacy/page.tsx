@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-export const metadata: Metadata = { title: "Privacy" };
+
+export const metadata: Metadata = {
+  title: "Privacy Notice",
+  description:
+    "Plain privacy guidelines and data protection policies for The Accidental Man.",
+  alternates: {
+    canonical: "/privacy",
+  },
+};
 export default function PrivacyPage() {
   return (
     <main id="main" className="page-wrap prose">
