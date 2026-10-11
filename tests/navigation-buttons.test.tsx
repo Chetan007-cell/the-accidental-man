@@ -107,4 +107,29 @@ describe("Button & Navigation Functionality: SiteHeader", () => {
     expect(menuButton.getAttribute("aria-expanded")).toBe("false");
     expect(document.body.style.overflow).toBe("");
   });
+
+  it("ensures mobile navigation overlay is inert and links have tabIndex=-1 when closed", () => {
+    const { container } = render(<SiteHeader />);
+
+    const overlay = container.querySelector("#mobile-navigation");
+    expect(overlay).not.toBeNull();
+    expect(overlay?.getAttribute("aria-hidden")).toBe("true");
+    expect(overlay?.hasAttribute("inert")).toBe(true);
+
+    const mobileLinks = overlay?.querySelectorAll("a");
+    expect(mobileLinks && mobileLinks.length > 0).toBe(true);
+    mobileLinks?.forEach((link) => {
+      expect(link.getAttribute("tabIndex")).toBe("-1");
+    });
+
+    // Open menu
+    const menuButton = screen.getByRole("button", { name: /open menu/i });
+    fireEvent.click(menuButton);
+
+    expect(overlay?.getAttribute("aria-hidden")).toBe("false");
+    expect(overlay?.hasAttribute("inert")).toBe(false);
+    mobileLinks?.forEach((link) => {
+      expect(link.getAttribute("tabIndex")).toBe("0");
+    });
+  });
 });

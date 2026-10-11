@@ -247,12 +247,16 @@ input:focus-visible {
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity var(--transition-smooth);
+  transition:
+    opacity var(--transition-smooth),
+    visibility var(--transition-smooth);
 }
 
 .mobile-nav-overlay.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
@@ -1800,6 +1804,11 @@ input:focus-visible {
 
   .mobile-nav-overlay {
     display: block;
+    visibility: hidden;
+  }
+
+  .mobile-nav-overlay.active {
+    visibility: visible;
   }
 
   .hero {

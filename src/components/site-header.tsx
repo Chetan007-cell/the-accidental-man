@@ -93,6 +93,7 @@ export function SiteHeader() {
         id="mobile-navigation"
         className={`mobile-nav-overlay ${isOpen ? "active" : ""}`}
         aria-hidden={!isOpen}
+        inert={!isOpen ? true : undefined}
         onClick={(e) => {
           if (e.target === e.currentTarget) setIsOpen(false);
         }}
@@ -102,21 +103,28 @@ export function SiteHeader() {
             <Link
               href="/journal"
               className={pathname?.startsWith("/journal") ? "active" : ""}
+              tabIndex={isOpen ? 0 : -1}
               onClick={() => setIsOpen(false)}
             >
               Journal
             </Link>
             <Link
               href="/#pillars"
+              tabIndex={isOpen ? 0 : -1}
               onClick={() => handleAnchorClick("#pillars")}
             >
               Pillars
             </Link>
-            <Link href="/#about" onClick={() => handleAnchorClick("#about")}>
+            <Link
+              href="/#about"
+              tabIndex={isOpen ? 0 : -1}
+              onClick={() => handleAnchorClick("#about")}
+            >
               Philosophy
             </Link>
             <Link
               href="/#newsletter"
+              tabIndex={isOpen ? 0 : -1}
               onClick={() => handleAnchorClick("#newsletter")}
             >
               Letters
@@ -124,6 +132,7 @@ export function SiteHeader() {
             <Link
               href="/privacy"
               className={pathname === "/privacy" ? "active" : ""}
+              tabIndex={isOpen ? 0 : -1}
               onClick={() => setIsOpen(false)}
             >
               Privacy
