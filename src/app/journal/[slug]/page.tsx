@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { ShareButton } from "@/components/share-button";
 import { stories } from "@/lib/content";
+import { getArticleSchema, getBreadcrumbListSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
   return stories.map(({ slug }) => ({ slug }));
@@ -39,8 +40,22 @@ export default async function StoryPage({
   const { slug } = await params;
   const story = stories.find((item) => item.slug === slug);
   if (!story) notFound();
+
+  const articleSchema = getArticleSchema(story);
+  const breadcrumbSchema = getBreadcrumbListSchema([
+    { name: "Home", item: "/" },
+    { name: "Journal", item: "/journal" },
+    { name: story.title, item: `/journal/${story.slug}` },
+  ]);
+
   return (
     <main id="main" className="article-wrap">
+      <script type="application/ld+json">
+        {JSON.stringify(articleSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbSchema)}
+      </script>
       <nav className="breadcrumbs" aria-label="Breadcrumb">
         <Link href="/">Home</Link>
         <span aria-hidden="true">/</span>

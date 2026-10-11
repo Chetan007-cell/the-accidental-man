@@ -62,7 +62,6 @@ export function SiteHeader() {
             width={58}
             height={34}
             priority
-            unoptimized
             className="site-logo"
           />
           <span className="wordmark">THE ACCIDENTAL MAN</span>

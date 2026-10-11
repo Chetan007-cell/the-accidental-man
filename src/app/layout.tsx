@@ -4,6 +4,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { AnalyticsConsent } from "@/components/analytics-consent";
 import { SiteHeader } from "@/components/site-header";
+import { getOrganizationSchema, getWebsiteSchema } from "@/lib/schema";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -59,17 +60,9 @@ export default function RootLayout({
       className={`${newsreader.variable} ${plusJakartaSans.variable}`}
     >
       <head>
-        <link
-          rel="preconnect"
-          href="https://www.googletagmanager.com"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link
-          rel="preconnect"
-          href="https://www.google-analytics.com"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <Script
           strategy="lazyOnload"
@@ -83,6 +76,12 @@ export default function RootLayout({
             gtag('config', '${GA_MEASUREMENT_ID}');
           `}
         </Script>
+        <script type="application/ld+json">
+          {JSON.stringify(getOrganizationSchema(siteUrl))}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(getWebsiteSchema(siteUrl))}
+        </script>
       </head>
       <body>
         <a className="skip-link" href="#main">

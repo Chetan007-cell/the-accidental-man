@@ -4,6 +4,7 @@ import Link from "next/link";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { PillarsSection } from "@/components/pillars-section";
 import { stories } from "@/lib/content";
+import { getHomePageFaqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   alternates: {
@@ -17,6 +18,9 @@ export default function HomePage() {
 
   return (
     <main id="main">
+      <script type="application/ld+json">
+        {JSON.stringify(getHomePageFaqSchema())}
+      </script>
       {/* Editorial Hero */}
       <section className="hero">
         <Image

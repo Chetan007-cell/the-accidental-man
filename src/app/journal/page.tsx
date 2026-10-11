@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { JournalFeed } from "@/components/journal-feed";
 import { stories } from "@/lib/content";
+import {
+  getBreadcrumbListSchema,
+  getJournalCollectionSchema,
+} from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "The Journal — Notes on Becoming",
@@ -13,8 +17,20 @@ export const metadata: Metadata = {
 };
 
 export default function JournalPage() {
+  const collectionSchema = getJournalCollectionSchema(stories);
+  const breadcrumbSchema = getBreadcrumbListSchema([
+    { name: "Home", item: "/" },
+    { name: "Journal", item: "/journal" },
+  ]);
+
   return (
     <main id="main" className="page-wrap journal-index-wrap">
+      <script type="application/ld+json">
+        {JSON.stringify(collectionSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbSchema)}
+      </script>
       <header className="journal-header">
         <p className="eyebrow">THE ACCIDENTAL MAN / FIELD NOTES</p>
         <h1 className="page-title">

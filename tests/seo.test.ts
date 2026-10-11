@@ -78,3 +78,108 @@ describe("AI Discovery: llms.txt", () => {
     expect(content).toContain("a-man-isnt-born-hes-built");
   });
 });
+
+import {
+  getArticleSchema,
+  getBreadcrumbListSchema,
+  getHomePageFaqSchema,
+  getJournalCollectionSchema,
+  getOrganizationSchema,
+  getWebsiteSchema,
+} from "@/lib/schema";
+
+describe("JSON-LD: Structured Data & Schema.org", () => {
+  it("generates valid site-wide Organization schema with brand, logo, and social sameAs", () => {
+    const org = getOrganizationSchema("https://theaccidentalman.com");
+    expect(org["@context"]).toBe("https://schema.org");
+    expect(org["@type"]).toBe("Organization");
+    expect(org.name).toBe("The Accidental Man");
+    expect(org.url).toBe("https://theaccidentalman.com");
+    expect(org.logo.url).toContain("/images/logo-mark.png");
+    expect(org.email).toBe("hello@theaccidentalman.com");
+    expect(Array.isArray(org.sameAs)).toBe(true);
+    expect(org.sameAs.length).toBeGreaterThanOrEqual(4);
+    expect(org.sameAs).toContain(
+      "https://www.linkedin.com/company/theaccidentalman/",
+    );
+    expect(org.sameAs).toContain("https://www.instagram.com/theaccidentalman/");
+  });
+
+  it("generates valid WebSite schema linking to organization publisher", () => {
+    const site = getWebsiteSchema("https://theaccidentalman.com");
+    expect(site["@context"]).toBe("https://schema.org");
+    expect(site["@type"]).toBe("WebSite");
+    expect(site.publisher["@id"]).toBe(
+      "https://theaccidentalman.com/#organization",
+    );
+  });
+
+  it("generates valid Article schema matching Rich Results requirements for every story", () => {
+    for (const story of stories) {
+      const article = getArticleSchema(story, "https://theaccidentalman.com");
+      expect(article["@context"]).toBe("https://schema.org");
+      expect(article["@type"]).toBe("Article");
+      expect(article.headline).toBe(story.title);
+      expect(article.description).toBe(story.excerpt);
+      expect(article.datePublished).toBe(story.publishedAt);
+      expect(article.dateModified).toBe(story.publishedAt);
+      expect(article.author.name).toBe(story.author);
+      expect(article.publisher["@id"]).toBe(
+        "https://theaccidentalman.com/#organization",
+      );
+      expect(article.mainEntityOfPage["@id"]).toBe(
+        `https://theaccidentalman.com/journal/${story.slug}`,
+      );
+      expect(article.image.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("generates valid BreadcrumbList schema with sequential positions and absolute URLs", () => {
+    const breadcrumbs = getBreadcrumbListSchema(
+      [
+        { name: "Home", item: "/" },
+        { name: "Journal", item: "/journal" },
+        {
+          name: "A Man Isn’t Born. He’s Built.",
+          item: "/journal/a-man-isnt-born-hes-built",
+        },
+      ],
+      "https://theaccidentalman.com",
+    );
+
+    expect(breadcrumbs["@context"]).toBe("https://schema.org");
+    expect(breadcrumbs["@type"]).toBe("BreadcrumbList");
+    expect(breadcrumbs.itemListElement).toHaveLength(3);
+    expect(breadcrumbs.itemListElement[0].position).toBe(1);
+    expect(breadcrumbs.itemListElement[0].item).toBe(
+      "https://theaccidentalman.com/",
+    );
+    expect(breadcrumbs.itemListElement[2].position).toBe(3);
+    expect(breadcrumbs.itemListElement[2].item).toBe(
+      "https://theaccidentalman.com/journal/a-man-isnt-born-hes-built",
+    );
+  });
+
+  it("generates valid CollectionPage schema with ItemList for Journal index", () => {
+    const collection = getJournalCollectionSchema(
+      stories,
+      "https://theaccidentalman.com",
+    );
+    expect(collection["@context"]).toBe("https://schema.org");
+    expect(collection["@type"]).toBe("CollectionPage");
+    expect(collection.mainEntity["@type"]).toBe("ItemList");
+    expect(collection.mainEntity.itemListElement).toHaveLength(stories.length);
+  });
+
+  it("generates FAQPage schema providing instant AI answers for core tenets and pillars", () => {
+    const faq = getHomePageFaqSchema("https://theaccidentalman.com");
+    expect(faq["@context"]).toBe("https://schema.org");
+    expect(faq["@type"]).toBe("FAQPage");
+    expect(faq.mainEntity.length).toBeGreaterThanOrEqual(3);
+    for (const q of faq.mainEntity) {
+      expect(q["@type"]).toBe("Question");
+      expect(q.name).toBeDefined();
+      expect(q.acceptedAnswer.text).toBeDefined();
+    }
+  });
+});
