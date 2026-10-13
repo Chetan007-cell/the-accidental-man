@@ -443,10 +443,12 @@ input:focus-visible {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg,
+    linear-gradient(
+      90deg,
       rgba(14, 14, 14, 0.88) 0%,
       rgba(14, 14, 14, 0.65) 55%,
-      rgba(14, 14, 14, 0.35) 100%),
+      rgba(14, 14, 14, 0.35) 100%
+    ),
     linear-gradient(0deg, rgba(14, 14, 14, 0.75) 0%, transparent 60%);
 }
 
@@ -1618,7 +1620,7 @@ input:focus-visible {
   margin: 0 auto;
 }
 
-.prose>p:first-of-type {
+.prose > p:first-of-type {
   font-size: 19px;
   line-height: 1.8;
   color: var(--ink);
@@ -1921,7 +1923,6 @@ input:focus-visible {
    ========================================================================== */
 
 @media (max-width: 1024px) {
-
   .section-wrap,
   .page-wrap,
   .newsletter,
