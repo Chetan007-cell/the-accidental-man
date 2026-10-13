@@ -9,10 +9,10 @@ export const stories = [
     date: "6 OCTOBER 2026",
     publishedAt: "2026-10-06",
     readingTimeMinutes: 5,
-    image: "/images/article-man-built.jpg",
+    image: "/images/article-man-built.png",
     imageAlt:
       "A thoughtful man walking along a coastal stone pier beside ocean waves in natural cinematic daylight",
-    articleImage: "/images/article-man-built.jpg",
+    articleImage: "/images/article-man-built.png",
     articleImageAlt:
       "A thoughtful man walking along a coastal stone pier beside ocean waves in natural cinematic daylight",
     introduction: [
@@ -81,10 +81,10 @@ export const stories = [
     date: "8 OCTOBER 2026",
     publishedAt: "2026-10-08",
     readingTimeMinutes: 5,
-    image: "/images/article-validation.jpg",
+    image: "/images/article-validation.png",
     imageAlt:
       "A man in quiet reflection looking into a brass mirror inside a warm wood-paneled atelier",
-    articleImage: "/images/article-validation.jpg",
+    articleImage: "/images/article-validation.png",
     articleImageAlt:
       "A man in quiet reflection looking into a brass mirror inside a warm wood-paneled atelier",
     introduction: [

@@ -24,7 +24,7 @@ export default function HomePage() {
       {/* Editorial Hero */}
       <section className="hero">
         <Image
-          src="/images/home-hero.jpg"
+          src="/images/home-hero.png"
           alt="A thoughtful man writing in an open journal at a sunlit wooden workshop table with morning coffee"
           fill
           priority
