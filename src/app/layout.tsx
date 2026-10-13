@@ -29,7 +29,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#0E0E0E",
+  themeColor: "#000000",
 };
 
 export const metadata: Metadata = {
@@ -64,18 +64,41 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <Script
-          strategy="lazyOnload"
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
-          `}
-        </Script>
+        {process.env.NODE_ENV !== "test" && (
+          <>
+            <Script id="google-consent-mode" strategy="beforeInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('consent', 'default', {
+                  analytics_storage: 'denied',
+                  ad_storage: 'denied',
+                  ad_user_data: 'denied',
+                  ad_personalization: 'denied'
+                });
+                try {
+                  if (localStorage.getItem('tam-analytics-consent-v1') === 'accepted') {
+                    gtag('consent', 'update', {
+                      analytics_storage: 'granted'
+                    });
+                  }
+                } catch (e) {}
+              `}
+            </Script>
+            <Script
+              strategy="lazyOnload"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            />
+            <Script id="google-analytics" strategy="lazyOnload">
+              {`
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}', {
+                  send_page_view: false
+                });
+              `}
+            </Script>
+          </>
+        )}
         <script type="application/ld+json">
           {JSON.stringify(getOrganizationSchema(siteUrl))}
         </script>

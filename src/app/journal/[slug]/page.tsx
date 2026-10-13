@@ -99,6 +99,50 @@ export default async function StoryPage({
           <ShareButton title={story.title} />
         </div>
       </article>
+      {stories.filter((item) => item.slug !== story.slug).length > 0 && (
+        <section className="related-articles" aria-labelledby="related-heading">
+          <div className="related-header">
+            <p className="eyebrow">CONTINUE READING</p>
+            <h2 id="related-heading">Related Dispatches & Essays</h2>
+          </div>
+          <div className="related-grid">
+            {stories
+              .filter((item) => item.slug !== story.slug)
+              .map((related) => (
+                <article key={related.slug} className="related-card">
+                  <Link
+                    href={`/journal/${related.slug}`}
+                    className="related-card-link"
+                    aria-label={`Read ${related.title}`}
+                  >
+                    <div className="related-image-wrap">
+                      <Image
+                        src={related.image}
+                        alt={related.imageAlt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 400px"
+                        className="related-image"
+                      />
+                      <span className="story-read-badge">
+                        {related.readingTimeMinutes} min
+                      </span>
+                    </div>
+                    <div className="related-card-content">
+                      <p className="eyebrow">
+                        {related.category} <span>· {related.date}</span>
+                      </p>
+                      <h3>{related.title}</h3>
+                      <p className="related-excerpt">{related.excerpt}</p>
+                      <span className="related-cta">
+                        Read article <span aria-hidden="true">→</span>
+                      </span>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+          </div>
+        </section>
+      )}
       <section className="newsletter article-newsletter" id="newsletter">
         <div>
           <p className="eyebrow">A LETTER, NOW AND THEN</p>

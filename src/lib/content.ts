@@ -4,15 +4,17 @@ export const stories = [
     category: "FOUNDATIONS",
     title: "A Man Isn’t Born. He’s Built.",
     excerpt:
-      "Becoming a man is not a finish line or a set of rules. It is the quiet, lifelong work of choosing the person you want to be.",
+      "Adulthood doesn’t arrive with an instruction manual. Why character isn’t an innate gift, but the quiet daily discipline of choosing who you want to become.",
     author: "The Accidental Man",
     date: "6 OCTOBER 2026",
     publishedAt: "2026-10-06",
     readingTimeMinutes: 5,
-    image: "/images/article-reflection.webp",
-    imageAlt: "A man walking along a quiet, rocky coastline",
-    articleImage: "/images/article-reflection.webp",
-    articleImageAlt: "An open notebook and pen on a sunlit wooden table",
+    image: "/images/article-man-built.jpg",
+    imageAlt:
+      "A thoughtful man walking along a coastal stone pier beside ocean waves in natural cinematic daylight",
+    articleImage: "/images/article-man-built.jpg",
+    articleImageAlt:
+      "A thoughtful man walking along a coastal stone pier beside ocean waves in natural cinematic daylight",
     introduction: [
       "At some point, most of us realise that growing up does not arrive as a clean moment. There is no morning when we wake with every answer, every skill, and a complete understanding of who we are supposed to become.",
       "The people who raised us, the friends who stand beside us, and the people we meet along the way can all help. Their care matters. But no one else can make our choices for us. Eventually, we have to take part in building our own lives.",
@@ -74,17 +76,17 @@ export const stories = [
     category: "MIND / SELF-AWARENESS",
     title: "Are You Celebrating Yourself, or Seeking Validation From Others?",
     excerpt:
-      "Two people can do exactly the same thing for completely different reasons. The real question isn't always what you're doing with your body. It's why you're doing it.",
+      "Two people can do the exact same workout or wear the same clothes for entirely opposite reasons. How to tell if you're building genuine self-worth—or performing for an invisible audience.",
     author: "The Accidental Man",
     date: "8 OCTOBER 2026",
     publishedAt: "2026-10-08",
     readingTimeMinutes: 5,
-    image: "/images/2nd-blog-img.png",
+    image: "/images/article-validation.jpg",
     imageAlt:
-      "A man walking thoughtfully through a city street at sunset carrying a duffel bag",
-    articleImage: "/images/2nd-blog-img.png",
+      "A man in quiet reflection looking into a brass mirror inside a warm wood-paneled atelier",
+    articleImage: "/images/article-validation.jpg",
     articleImageAlt:
-      "A man walking thoughtfully through a city street at sunset carrying a duffel bag",
+      "A man in quiet reflection looking into a brass mirror inside a warm wood-paneled atelier",
     introduction: [
       "There’s nothing inherently wrong with showing your body.",
       "A woman who dresses confidently and celebrates her curves isn't fundamentally different from a man who works out and takes pride in his physique.",

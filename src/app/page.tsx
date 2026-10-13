@@ -24,8 +24,8 @@ export default function HomePage() {
       {/* Editorial Hero */}
       <section className="hero">
         <Image
-          src="/images/home-hero.webp"
-          alt="A man pauses at a window as morning light reaches the room"
+          src="/images/home-hero.jpg"
+          alt="A thoughtful man writing in an open journal at a sunlit wooden workshop table with morning coffee"
           fill
           priority
           sizes="100vw"
@@ -33,15 +33,16 @@ export default function HomePage() {
         />
         <div className="hero-shade" />
         <div className="hero-copy">
-          <p className="eyebrow">A FACTORY FOR THE MODERN MAN</p>
+          <p className="eyebrow">A FACTORY FOR THE MODERN MAN · VOL. 01</p>
           <h1>
             A man isn’t born.
             <br />
             <em>He’s built.</em>
           </h1>
           <p className="hero-dek">
-            A practical, thoughtful space helping men learn, reflect, practice,
-            maintain, and evolve across everyday life.
+            An independent journal on character, mind, body, and modern life.
+            Practical essays, field notes, and honest perspectives for men
+            building a life they respect.
           </p>
           <div className="hero-actions">
             <Link className="button button-light" href="/journal">
@@ -52,8 +53,110 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+
+        {/* 5-Second Clarity Orientation Bar */}
+        {/* <div className="hero-orientation-bar">
+          <div className="orientation-col">
+            <span className="orientation-label">WHAT WE ARE</span>
+            <p>An editorial publication for character & modern living</p>
+          </div>
+          <div className="orientation-col">
+            <span className="orientation-label">WHAT WE COVER</span>
+            <p>Mind · Character · Style · Grooming · Career · Relationships</p>
+          </div>
+          <div className="orientation-col">
+            <span className="orientation-label">OUR CREED</span>
+            <p>Practical guidance without empty hustle or alpha posturing</p>
+          </div>
+        </div> */}
+
         <span className="hero-index">VOL. 01&nbsp; / &nbsp;THE BEGINNING</span>
       </section>
+
+      {/* Latest Articles Section — Shown Prominently at the Top */}
+      <section className="journal section-wrap" id="journal">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">LATEST DISPATCHES & ESSAYS</p>
+            <h2>Fresh from the journal</h2>
+          </div>
+          <Link className="text-link" href="/journal">
+            All stories <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="story-grid story-grid-featured">
+          {stories.map((story) => (
+            <article className="story-card" key={story.slug}>
+              <Link
+                href={`/journal/${story.slug}`}
+                aria-label={`Read ${story.title}`}
+              >
+                <div className="story-image">
+                  <Image
+                    src={story.image}
+                    alt={story.imageAlt || ""}
+                    fill
+                    sizes="(max-width: 700px) 100vw, 50vw"
+                  />
+                  <span className="story-read-badge">
+                    {story.readingTimeMinutes} min
+                  </span>
+                </div>
+                <div className="story-card-body">
+                  <p className="eyebrow">
+                    {story.category} <span>— {story.date}</span>
+                  </p>
+                  <h3>{story.title}</h3>
+                  <p>{story.excerpt}</p>
+                  <span className="story-cta">
+                    Read essay <span aria-hidden="true">↗</span>
+                  </span>
+                </div>
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Foundational Essay Spotlight */}
+      {foundationalStory && (
+        <section className="foundational-spotlight section-wrap">
+          <div className="foundational-card">
+            <div className="foundational-image-wrap">
+              <Image
+                src={foundationalStory.image}
+                alt={foundationalStory.imageAlt}
+                fill
+                sizes="(max-width: 900px) 100vw, 50vw"
+                className="foundational-image"
+              />
+            </div>
+            <div className="foundational-content">
+              <div className="foundational-badge">
+                FOUNDATIONAL MANIFESTO · VOL. 01
+              </div>
+              <p className="eyebrow">
+                {foundationalStory.category} —{" "}
+                {foundationalStory.readingTimeMinutes} MIN READ
+              </p>
+              <h2>{foundationalStory.title}</h2>
+              <p className="foundational-excerpt">
+                {foundationalStory.excerpt}
+              </p>
+              <p className="foundational-quote">
+                “Becoming a man is not about having everything figured out; it
+                is about becoming more willing and able to figure things out.”
+              </p>
+              <Link
+                href={`/journal/${foundationalStory.slug}`}
+                className="button button-editorial"
+              >
+                Read the foundational essay <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Brand Philosophy: Become, Maintain, Evolve */}
       <section className="intro section-wrap" id="about">
@@ -98,91 +201,6 @@ export default function HomePage() {
               respect.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* Foundational Essay Spotlight */}
-      {foundationalStory && (
-        <section className="foundational-spotlight section-wrap">
-          <div className="foundational-card">
-            <div className="foundational-image-wrap">
-              <Image
-                src={foundationalStory.image}
-                alt={foundationalStory.imageAlt}
-                fill
-                sizes="(max-width: 900px) 100vw, 50vw"
-                className="foundational-image"
-              />
-            </div>
-            <div className="foundational-content">
-              <div className="foundational-badge">
-                FOUNDATIONAL MANIFESTO · VOL. 01
-              </div>
-              <p className="eyebrow">
-                {foundationalStory.category} —{" "}
-                {foundationalStory.readingTimeMinutes} MIN READ
-              </p>
-              <h2>{foundationalStory.title}</h2>
-              <p className="foundational-excerpt">
-                {foundationalStory.excerpt}
-              </p>
-              <p className="foundational-quote">
-                “Becoming a man is not about having everything figured out; it
-                is about becoming more willing and able to figure things out.”
-              </p>
-              <Link
-                href={`/journal/${foundationalStory.slug}`}
-                className="button button-editorial"
-              >
-                Read the foundational essay <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Journal Stories Section */}
-      <section className="journal section-wrap" id="journal">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">FIELD NOTES & ESSAYS</p>
-            <h2>From the journal</h2>
-          </div>
-          <Link className="text-link" href="/journal">
-            All stories <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-        <div className="story-grid story-grid-featured">
-          {stories.map((story) => (
-            <article className="story-card" key={story.slug}>
-              <Link
-                href={`/journal/${story.slug}`}
-                aria-label={`Read ${story.title}`}
-              >
-                <div className="story-image">
-                  <Image
-                    src={story.image}
-                    alt={story.imageAlt || ""}
-                    fill
-                    sizes="(max-width: 700px) 100vw, 50vw"
-                  />
-                  <span className="story-read-badge">
-                    {story.readingTimeMinutes} min
-                  </span>
-                </div>
-                <div className="story-card-body">
-                  <p className="eyebrow">
-                    {story.category} <span>— {story.date}</span>
-                  </p>
-                  <h3>{story.title}</h3>
-                  <p>{story.excerpt}</p>
-                  <span className="story-cta">
-                    Read essay <span aria-hidden="true">↗</span>
-                  </span>
-                </div>
-              </Link>
-            </article>
-          ))}
         </div>
       </section>
 

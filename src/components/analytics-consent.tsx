@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const CONSENT_KEY = "tam-analytics-consent-v1";
-const MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-XZ3NLG1Y0T";
 
 declare global {
   interface Window {
@@ -15,78 +13,48 @@ declare global {
   }
 }
 
-function GoogleAnalytics() {
-  const pathname = usePathname();
-  const [loaded, setLoaded] = useState(false);
-  const lastPage = useRef("");
-
-  useEffect(() => {
-    window.dataLayer = window.dataLayer ?? [];
+function updateConsentState(granted: boolean) {
+  if (typeof window === "undefined") return;
+  window.dataLayer = window.dataLayer ?? [];
+  if (typeof window.gtag !== "function") {
     window.gtag = (...args: unknown[]) => window.dataLayer?.push(args);
-    window.gtag("consent", "default", {
-      analytics_storage: "denied",
-      ad_storage: "denied",
-      ad_user_data: "denied",
-      ad_personalization: "denied",
-    });
-    window.gtag("consent", "update", {
-      analytics_storage: "granted",
-      ad_storage: "denied",
-      ad_user_data: "denied",
-      ad_personalization: "denied",
-    });
-    window.gtag("js", new Date());
-    window.gtag("config", MEASUREMENT_ID, {
-      send_page_view: false,
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false,
-    });
+  }
+  window.gtag("consent", "update", {
+    analytics_storage: granted ? "granted" : "denied",
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+  });
+}
 
-    const script = document.createElement("script");
-    script.id = "google-analytics-tag";
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
-    script.onload = () => setLoaded(true);
-    document.head.append(script);
-
-    return () => {
-      window.gtag?.("consent", "update", {
-        analytics_storage: "denied",
-        ad_storage: "denied",
-        ad_user_data: "denied",
-        ad_personalization: "denied",
-      });
-      script.remove();
-      window.gtag = undefined;
-      setLoaded(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!loaded || !window.gtag) return;
-    const pagePath = pathname ?? "/";
-    if (pagePath === lastPage.current) return;
-    lastPage.current = pagePath;
-    window.gtag("event", "page_view", {
-      page_path: pagePath,
-      page_location: new URL(pagePath, window.location.origin).toString(),
-      page_title: document.title,
-    });
-  }, [loaded, pathname]);
-
-  return null;
+function trackPageView(pagePath: string) {
+  if (typeof window === "undefined") return;
+  window.dataLayer = window.dataLayer ?? [];
+  if (typeof window.gtag !== "function") {
+    window.gtag = (...args: unknown[]) => window.dataLayer?.push(args);
+  }
+  window.gtag("event", "page_view", {
+    page_path: pagePath,
+    page_location: window.location.href,
+    page_title: document.title,
+  });
 }
 
 export function AnalyticsConsent() {
+  const pathname = usePathname();
   const [choice, setChoice] = useState<"accepted" | "declined" | null>(null);
   const [resolved, setResolved] = useState(false);
   const [open, setOpen] = useState(false);
+  const lastTrackedPath = useRef("");
 
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(CONSENT_KEY);
       if (saved === "accepted" || saved === "declined") {
         setChoice(saved);
+        if (saved === "accepted") {
+          updateConsentState(true);
+        }
       } else {
         setOpen(true);
       }
@@ -96,6 +64,15 @@ export function AnalyticsConsent() {
     setResolved(true);
   }, []);
 
+  // Track page views on route changes when consent is accepted
+  useEffect(() => {
+    if (!resolved || choice !== "accepted") return;
+    const pagePath = pathname ?? "/";
+    if (pagePath === lastTrackedPath.current) return;
+    lastTrackedPath.current = pagePath;
+    trackPageView(pagePath);
+  }, [choice, pathname, resolved]);
+
   function saveChoice(nextChoice: "accepted" | "declined") {
     try {
       window.localStorage.setItem(CONSENT_KEY, nextChoice);
@@ -104,11 +81,18 @@ export function AnalyticsConsent() {
     }
     setChoice(nextChoice);
     setOpen(false);
+    const isGranted = nextChoice === "accepted";
+    updateConsentState(isGranted);
+
+    if (isGranted) {
+      const pagePath = pathname ?? "/";
+      lastTrackedPath.current = pagePath;
+      trackPageView(pagePath);
+    }
   }
 
   return (
     <>
-      {resolved && choice === "accepted" && <GoogleAnalytics />}
       {resolved && open ? (
         <section
           className="analytics-consent"
