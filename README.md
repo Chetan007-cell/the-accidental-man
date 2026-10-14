@@ -1,6 +1,9 @@
 # The Accidental Man
 
-A content-first men's lifestyle journal designed to grow into a considered commerce brand. The first release is a fast public editorial site with an email signup. The codebase keeps content, API handling and data access in one deployable app; add services only when a real need appears.
+A content-first men's lifestyle journal designed to grow into a considered commerce brand. The first release is a fast public editorial site with an email signup. The codebase keeps content, API handling and data access in one deployable app; add services only when a real need appears.\
+
+
+
 
 ## Start locally
 
