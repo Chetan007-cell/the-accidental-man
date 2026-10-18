@@ -11,6 +11,8 @@ const FILTER_OPTIONS = [
   { id: "all", label: "ALL ESSAYS" },
   { id: "foundations", label: "FOUNDATIONS" },
   { id: "mind", label: "MIND & SELF-AWARENESS" },
+  { id: "body", label: "BODY" },
+  { id: "spirit", label: "SPIRIT & PURPOSE" },
   { id: "emotions", label: "EMOTIONS" },
   { id: "pillars", label: "THE 9 PILLARS" },
 ];
@@ -27,6 +29,16 @@ export function JournalFeed({ stories }: { stories: Story[] }) {
     }
     if (selectedFilter === "mind") {
       return stories.filter((s) => s.category.toUpperCase().includes("MIND"));
+    }
+    if (selectedFilter === "body") {
+      return stories.filter((s) => s.category.toUpperCase().includes("BODY"));
+    }
+    if (selectedFilter === "spirit") {
+      return stories.filter(
+        (s) =>
+          s.category.toUpperCase().includes("SPIRIT") ||
+          s.category.toUpperCase().includes("PURPOSE"),
+      );
     }
     if (selectedFilter === "emotions") {
       return stories.filter(

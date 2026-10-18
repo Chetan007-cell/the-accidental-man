@@ -16,6 +16,13 @@ export default function HomePage() {
   const foundationalStory =
     stories.find((s) => s.slug === "a-man-isnt-born-hes-built") ?? stories[0];
 
+  const latestStories = [...stories]
+    .sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+    )
+    .slice(0, 2);
+
   return (
     <main id="main">
       <script type="application/ld+json">
@@ -85,7 +92,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="story-grid story-grid-featured">
-          {stories.map((story) => (
+          {latestStories.map((story) => (
             <article className="story-card" key={story.slug}>
               <Link
                 href={`/journal/${story.slug}`}

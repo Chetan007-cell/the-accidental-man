@@ -1,86 +1,5 @@
 import Link from "next/link";
-
-interface Pillar {
-  number: string;
-  name: string;
-  description: string;
-  status: "active" | "expanding";
-  activeCount?: number;
-  highlightStorySlug?: string;
-  highlightStoryTitle?: string;
-}
-
-const PILLARS: Pillar[] = [
-  {
-    number: "01",
-    name: "Mind",
-    description:
-      "Learning, attention, habits, judgment, confidence, and mental clarity.",
-    status: "active",
-    activeCount: 1,
-    highlightStorySlug: "celebrating-yourself-or-seeking-validation",
-    highlightStoryTitle: "Are You Celebrating Yourself, or Seeking Validation?",
-  },
-  {
-    number: "02",
-    name: "Emotions",
-    description:
-      "Emotional literacy, resilience, self-respect, asking for help, and coping skills.",
-    status: "active",
-    activeCount: 1,
-    highlightStorySlug: "a-man-isnt-born-hes-built",
-    highlightStoryTitle: "A Man Isn’t Born. He’s Built.",
-  },
-  {
-    number: "03",
-    name: "Body",
-    description:
-      "Movement, strength, sleep, nutrition, health, and sustainable physical care.",
-    status: "expanding",
-  },
-  {
-    number: "04",
-    name: "Spirit & Purpose",
-    description:
-      "Values, meaning, identity, reflection, and the questions that guide a life.",
-    status: "expanding",
-  },
-  {
-    number: "05",
-    name: "Grooming",
-    description:
-      "Simple, inclusive routines, practical self-care, and daily maintenance.",
-    status: "expanding",
-  },
-  {
-    number: "06",
-    name: "Style",
-    description:
-      "Fit, function, self-expression, and dressing for real situations and budgets.",
-    status: "expanding",
-  },
-  {
-    number: "07",
-    name: "Career & Money",
-    description:
-      "Work, craft, financial fundamentals, decisions, and long-term stability.",
-    status: "expanding",
-  },
-  {
-    number: "08",
-    name: "Relationships",
-    description:
-      "Friendship, family, partnership, communication, boundaries, and care.",
-    status: "expanding",
-  },
-  {
-    number: "09",
-    name: "Life",
-    description:
-      "Home, time, responsibility, transitions, culture, leisure, and whole living.",
-    status: "expanding",
-  },
-];
+import { getStoriesForPillar, PILLARS } from "@/lib/pillars";
 
 export function PillarsSection() {
   return (
@@ -91,7 +10,9 @@ export function PillarsSection() {
           <h2>The Nine Pillars of Becoming</h2>
         </div>
         <div className="pillars-meta-note">
-          <span>Active in Journal & Expanding Soon</span>
+          <Link href="/pillars" className="pillars-all-link">
+            <span>Explore All 9 Pillars Index →</span>
+          </Link>
         </div>
       </div>
 
@@ -99,48 +20,78 @@ export function PillarsSection() {
         A man isn’t built through one narrow checklist. We explore nine
         interconnected dimensions that shape a grounded, capable life—publishing
         deep-dive field notes today, and expanding into practical guides,
-        toolkits, and audio conversations.
+        toolkits, and audio conversations. Click any pillar to explore all
+        tagged field notes.
       </p>
 
       <div className="pillars-grid">
-        {PILLARS.map((pillar) => (
-          <article
-            key={pillar.number}
-            className={`pillar-card ${
-              pillar.status === "active" ? "pillar-active" : "pillar-expanding"
-            }`}
-          >
-            <div className="pillar-header">
-              <span className="pillar-num">{pillar.number}</span>
-              <span className="pillar-badge">
-                {pillar.status === "active"
-                  ? "In The Journal"
-                  : "Expanding Soon"}
-              </span>
-            </div>
-            <h3 className="pillar-name">{pillar.name}</h3>
-            <p className="pillar-desc">{pillar.description}</p>
+        {PILLARS.map((pillar) => {
+          const taggedStories = getStoriesForPillar(pillar.slug);
+          const hasStories = taggedStories.length > 0;
 
-            {pillar.status === "active" && pillar.highlightStorySlug ? (
-              <div className="pillar-link-wrap">
+          return (
+            <article
+              key={pillar.number}
+              className={`pillar-card ${
+                pillar.status === "active"
+                  ? "pillar-active"
+                  : "pillar-expanding"
+              }`}
+            >
+              <div className="pillar-header">
+                <span className="pillar-num">{pillar.number}</span>
+                <span className="pillar-badge">
+                  {hasStories
+                    ? `${taggedStories.length} ${
+                        taggedStories.length === 1 ? "Essay" : "Essays"
+                      } In The Journal`
+                    : "Expanding Soon"}
+                </span>
+              </div>
+
+              <h3 className="pillar-name">
                 <Link
-                  href={`/journal/${pillar.highlightStorySlug}`}
-                  className="pillar-story-link"
+                  href={`/pillars/${pillar.slug}`}
+                  className="pillar-title-link"
                 >
-                  <span className="story-arrow">↗</span>
-                  <span className="story-label">
-                    Read: {pillar.highlightStoryTitle}
+                  {pillar.name}
+                </Link>
+              </h3>
+
+              <p className="pillar-desc">{pillar.description}</p>
+
+              <div className="pillar-card-actions">
+                <Link
+                  href={`/pillars/${pillar.slug}`}
+                  className="pillar-explore-link"
+                >
+                  <span>
+                    {hasStories
+                      ? `View All ${pillar.name} Essays (${taggedStories.length})`
+                      : `Explore ${pillar.name}`}
+                  </span>
+                  <span className="story-arrow" aria-hidden="true">
+                    →
                   </span>
                 </Link>
+
+                {pillar.status === "active" && pillar.highlightStorySlug && (
+                  <div className="pillar-link-wrap">
+                    <Link
+                      href={`/journal/${pillar.highlightStorySlug}`}
+                      className="pillar-story-link"
+                    >
+                      <span className="story-arrow">↗</span>
+                      <span className="story-label">
+                        Read: {pillar.highlightStoryTitle}
+                      </span>
+                    </Link>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="pillar-upcoming">
-                <span className="upcoming-dot" />
-                <span>Field guides & essays in development</span>
-              </div>
-            )}
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
 
       <div className="universe-banner">

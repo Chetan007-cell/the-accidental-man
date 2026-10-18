@@ -41,6 +41,22 @@ describe("Button & Link Functionality: Homepage CTAs", () => {
     const allStoriesLink = screen.getByRole("link", { name: /all stories/i });
     expect(allStoriesLink.getAttribute("href")).toBe("/journal");
   });
+
+  it("renders only the latest 2 articles in the Fresh from the journal section", () => {
+    const { container } = render(<HomePage />);
+
+    const featuredGrid = container.querySelector(".story-grid-featured");
+    expect(featuredGrid).not.toBeNull();
+    const articles = featuredGrid?.querySelectorAll(".story-card");
+    expect(articles?.length).toBe(2);
+
+    expect(screen.getByText("The World is Governed by Energy")).toBeDefined();
+    expect(
+      screen.getByText(
+        "Are You Celebrating Yourself, or Seeking Validation From Others?",
+      ),
+    ).toBeDefined();
+  });
 });
 
 describe("Button & Link Functionality: PillarsSection", () => {

@@ -2,6 +2,7 @@ export const stories = [
   {
     slug: "a-man-isnt-born-hes-built",
     category: "FOUNDATIONS",
+    tags: ["Foundations", "Emotions"],
     title: "A Man Isn’t Born. He’s Built.",
     excerpt:
       "Adulthood doesn’t arrive with an instruction manual. Why character isn’t an innate gift, but the quiet daily discipline of choosing who you want to become.",
@@ -74,6 +75,7 @@ export const stories = [
   {
     slug: "celebrating-yourself-or-seeking-validation",
     category: "MIND / SELF-AWARENESS",
+    tags: ["Mind", "Self-Awareness"],
     title: "Are You Celebrating Yourself, or Seeking Validation From Others?",
     excerpt:
       "Two people can do the exact same workout or wear the same clothes for entirely opposite reasons. How to tell if you're building genuine self-worth—or performing for an invisible audience.",
@@ -140,6 +142,68 @@ export const stories = [
           "And perhaps the goal isn't to stop caring what people think. Perhaps it's to stop needing them to tell you that you're enough.",
           "So the next time you look in the mirror, ask yourself: Am I expressing myself—or asking the world to tell me that I'm enough?",
           "The answer might tell you more about yourself than the mirror ever could.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "the-world-is-governed-by-energy",
+    category: "MIND / BODY / SPIRIT & PURPOSE",
+    tags: ["Mind", "Body", "Spirit & Purpose"],
+    title: "The World is Governed by Energy",
+    excerpt:
+      "From Einstein’s physics to ancient Indian wisdom, discover how the laws of energy shape your health, mindset, and everyday life.",
+    author: "The Accidental Man",
+    date: "18 OCTOBER 2026",
+    publishedAt: "2026-10-18",
+    readingTimeMinutes: 4,
+    image: "/images/article-energy.jpg",
+    imageAlt:
+      "A thoughtful man in quiet contemplation on an expansive highland ridge bathed in warm golden dawn light",
+    articleImage: "/images/article-energy.jpg",
+    articleImageAlt:
+      "A thoughtful man in quiet contemplation on an expansive highland ridge bathed in warm golden dawn light",
+    introduction: [
+      "Everything in this world is energy.",
+      "Albert Einstein proved that matter and energy are fundamentally the same thing—matter is simply energy in a compressed state, bound together as expressed by E = mc². According to the laws of physics, energy cannot be created or destroyed; it only transforms from one state to another. Its fundamental nature is to flow. You cannot control it, you can only direct it.",
+      "That is the scientific reality of energy. But how does it play out in our daily lives?",
+    ],
+    sections: [
+      {
+        heading: "The Law of Systems and Frequencies",
+        paragraphs: [
+          "Everything around us holds a specific energetic signature—whether it is an object, a place, or a person. Every system is made up of smaller subsystems, and the overall vibe or frequency of any space is the average of everything inside it.",
+          "Think of a room as a system. You walk in and see a masterpiece painting worth millions on the wall. That single subsystem elevates the entire room. But then you notice peeling paint on the walls and harsh, cheap lighting that ruins the ambiance. Those elements drag the average vibration of the room back down.",
+        ],
+      },
+      {
+        heading: "Your Environment is Your Frequency",
+        paragraphs: [
+          "Just like that room, you are a system. The people you converse with, the company you keep, and the spaces you inhabit directly calibrate your frequency.",
+          "High-vibrational people and places elevate you, while low-vibrational environments drain you. This is why travel is not just a luxury—it is an act of self-love. Stepping into new, inspiring environments resets your internal frequency.",
+        ],
+      },
+      {
+        heading: "High Vibration vs. Low Vibration",
+        paragraphs: [
+          "When you operate at a high frequency, life feels like it’s on easy mode. Your baseline state becomes one of peace, self-love, clarity, gratitude, and joy.",
+          "This isn't just mental; it manifests physically. Your body ages slower and your internal organs thrive free of chronic stress. Your skin carries a natural, healthy glow. You become naturally magnetic and grounded—which is why monks, who spend their lives cultivating this state, radiate such strong presence and longevity.",
+          "Conversely, when your energy drops, you feel the degradation mentally, physically, and spiritually. Your mind becomes a magnet for anxiety, anger, greed, lust, confusion, chaos, and overthinking. Under this constant stress, the body ages rapidly, internal systems break down, and your vitality fades. A person trapped in ego and low energy can stand in the middle of a crowded room and still feel completely alone.",
+        ],
+      },
+      {
+        heading: "Trust the Data of Your Gut",
+        paragraphs: [
+          "You don’t need to be deeply spiritual to understand energy—you just need to be observant. Treat your intuition like a scientific instrument. Pay attention to how your body reacts to its surroundings.",
+          "Ask yourself the honest questions: How do I feel after spending an hour with this person? Did walking into that place make me feel expanded or drained?",
+          "Be fiercely selective about what—and who—you allow into your space.",
+        ],
+      },
+      {
+        heading: "The Ancient Perspective: Devi & Shakti",
+        paragraphs: [
+          "Thousands of years ago, ancient sages in India understood this universal law deeply. They recognized this dynamic, creative energy as feminine and called it Devi or Shakti. Festivals like Navratri are not just rituals; they are a celebration of this exact truth—a time to bow down to the infinite, flowing essence of the universal force that governs us all.",
+          "Energy is not a distant concept; it is the currency of everyday life. What is one place or habit that instantly raises your energy?",
         ],
       },
     ],

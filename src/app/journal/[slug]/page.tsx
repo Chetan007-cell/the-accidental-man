@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { ShareButton } from "@/components/share-button";
 import { stories } from "@/lib/content";
+import { findPillarBySlug } from "@/lib/pillars";
 import { getArticleSchema, getBreadcrumbListSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
@@ -96,6 +97,30 @@ export default async function StoryPage({
           </section>
         ))}
         <div className="article-share">
+          {"tags" in story &&
+            Array.isArray(story.tags) &&
+            story.tags.length > 0 && (
+              <div className="article-tags">
+                <span className="tags-label">Pillars:</span>
+                {story.tags.map((tag: string) => {
+                  const pillar = findPillarBySlug(tag);
+                  return pillar ? (
+                    <Link
+                      key={tag}
+                      href={`/pillars/${pillar.slug}`}
+                      className="tag-pill tag-pill-link"
+                      title={`View all essays in ${pillar.name}`}
+                    >
+                      {tag} <span aria-hidden="true">↗</span>
+                    </Link>
+                  ) : (
+                    <span key={tag} className="tag-pill">
+                      {tag}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
           <ShareButton title={story.title} />
         </div>
       </article>
