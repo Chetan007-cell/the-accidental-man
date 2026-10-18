@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    other: {
+      "p:domain_verify": "da1bc890e12569dbb3642411f9bb2a84",
+    },
+  },
 };
 
 export default function HomePage() {

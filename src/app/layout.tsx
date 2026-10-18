@@ -49,6 +49,11 @@ export const metadata: Metadata = {
     title: "The Accidental Man — A Factory for the Modern Man",
     description: "A man isn’t born. He’s built. Notes on becoming.",
   },
+  verification: {
+    other: {
+      "p:domain_verify": "da1bc890e12569dbb3642411f9bb2a84",
+    },
+  },
 };
 
 export default function RootLayout({
