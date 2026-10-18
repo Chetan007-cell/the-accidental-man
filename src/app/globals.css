@@ -2032,7 +2032,7 @@ input:focus-visible {
   margin: 0 auto;
 }
 
-.prose>p:first-of-type {
+.prose > p:first-of-type {
   font-size: 19px;
   line-height: 1.8;
   color: var(--ink);

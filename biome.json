@@ -16,5 +16,8 @@
   "linter": { "enabled": true },
   "javascript": {
     "formatter": { "quoteStyle": "double", "semicolons": "always" }
+  },
+  "css": {
+    "formatter": { "enabled": false }
   }
 }
