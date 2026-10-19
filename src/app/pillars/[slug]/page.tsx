@@ -48,6 +48,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
   }
 
   const taggedStories = getStoriesForPillar(pillar.slug);
+  const otherPillars = PILLARS.filter((p) => p.slug !== pillar.slug);
 
   const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", item: "/" },

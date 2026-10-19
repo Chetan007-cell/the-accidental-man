@@ -103,9 +103,8 @@ export function AnalyticsConsent() {
               YOUR PRIVACY, YOUR CALL
             </p>
             <p>
-              May we use Google Analytics to understand page visits and improve
-              the journal? Analytics stays off unless you allow it. You can
-              change your choice later in Privacy settings.
+              Optional Google Analytics helps us understand visits and improve
+              the journal. It stays off unless you allow it.
             </p>
             <Link href="/privacy">Read our privacy notice</Link>
           </div>
