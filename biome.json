@@ -9,7 +9,9 @@
       "!node_modules",
       "!drizzle/meta",
       "!public/images/*.svg",
-      "!next-env.d.ts"
+      "!next-env.d.ts",
+      "!.vscode",
+      "!sources"
     ]
   },
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2 },

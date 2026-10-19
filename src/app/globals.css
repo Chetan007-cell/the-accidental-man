@@ -1663,7 +1663,7 @@ input:focus-visible {
   color: #141413;
   border: 1px solid #ffffff;
   border-radius: var(--radius-sm);
-  -webkit-appearance: none;
+  /* -webkit-appearance: none; */
   box-sizing: border-box;
   transition:
     border-color var(--transition-fast),
@@ -2554,7 +2554,7 @@ input:focus-visible {
     color: #141413;
     border: 1px solid #ffffff;
     border-radius: var(--radius-sm);
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
     box-sizing: border-box;
   }
 
