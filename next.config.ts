@@ -8,6 +8,7 @@ const scriptPolicy =
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
+  agentRules: false,
   images: {
     formats: ["image/avif", "image/webp"],
   },

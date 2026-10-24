@@ -11,7 +11,8 @@
       "!public/images/*.svg",
       "!next-env.d.ts",
       "!.vscode",
-      "!sources"
+      "!sources",
+      "!*.md"
     ]
   },
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2 },

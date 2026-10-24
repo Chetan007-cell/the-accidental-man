@@ -35,11 +35,12 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "drizzle-kit": "^0.31.8",
-    "happy-dom": "^20.14.6",
+    "happy-dom": "^21.0.4",
     "typescript": "^5.9.3",
     "vitest": "^5.0.3"
   },
   "overrides": {
+    "vite": "^6.4.5",
     "esbuild": "^0.25.12"
   }
 }
