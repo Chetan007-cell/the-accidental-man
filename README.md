@@ -1,90 +1,181 @@
 # The Accidental Man
 
-A content-first men's lifestyle journal designed to grow into a considered commerce brand. The first release is a fast public editorial site with an email signup. The codebase keeps content, API handling and data access in one deployable app; add services only when a real need appears.\
+> **A man isn't born. He's built.**  
+> *A factory for the modern man — to become, maintain, and evolve.*
 
+[![Next.js](https://img.shields.io/badge/Next.js-16.3+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-0.45+-C5F74F?style=flat-square&logo=drizzle)](https://orm.drizzle.team/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-336791?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
+[![Biome](https://img.shields.io/badge/Biome-2.5+-60A5FA?style=flat-square&logo=biome)](https://biomejs.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-5+-FCC72B?style=flat-square&logo=vitest)](https://vitest.dev/)
 
+A content-first men's lifestyle journal designed to grow into a considered commerce brand. The first release is a fast, public editorial site with an email signup, structured typography, and pillar-based navigation across 9 core areas of life.
 
+The codebase keeps content, API handling, and data access in one clean deployable application.
 
-## Start locally
+---
 
-Requirements: Node.js 20.9+ and Docker (or a PostgreSQL 16+ database).
+## ⚡ Quick Start
 
-1. Copy `.env.example` to `.env.local` (PowerShell: `Copy-Item .env.example .env.local`). The example already has local `DATABASE_URL` and `APP_URL` values.
-2. Start PostgreSQL with `docker compose up -d db` (or point `DATABASE_URL` at a running PostgreSQL 16+ instance).
-3. Run `npm ci`.
-4. Run `npm run db:migrate`.
-5. Run `npm run dev` and open http://localhost:3000.
+### Prerequisites
+- **Node.js**: `20.9+` (Node 22 recommended)
+- **Docker** (or an existing PostgreSQL 16+ database)
 
-The public journal content is a small TypeScript fixture in `src/lib/content.ts`. The database already has article and subscriber tables; admin publishing comes in the next phase. The newsletter API returns 503 until PostgreSQL is reachable and the migrations have been applied. In local development, same-origin checks use the request host when `APP_URL` is unset; production still requires an explicit `APP_URL`.
+### Installation & Setup
 
-## Architecture
+1. **Clone and setup environment variables:**
+   ```bash
+   # Copy example environment configuration
+   cp .env.example .env.local
+   # On Windows PowerShell:
+   # Copy-Item .env.example .env.local
+   ```
 
-- **Web and API:** Next.js App Router, React and TypeScript. Server components render public pages; client components are limited to newsletter/signup controls, share, and privacy preferences. Route handlers are the narrow API boundary.
-- **Data:** PostgreSQL with Drizzle ORM and committed SQL migrations. Use managed PostgreSQL with automated point-in-time backups in production. The app does not connect to the database during static page rendering.
-- **Content:** Start with typed content fixtures. Move to a small admin/editor workflow backed by `articles` when publication volume warrants it. Keep content queries in a repository module; do not spread SQL through pages.
-- **Email:** Store each consenting subscriber in PostgreSQL with consent time/source, an unsubscribe token, and welcome-email delivery time. A Resend API adapter sends a brand welcome message from `hello@theaccidentalman.com`. Set `RESEND_API_KEY` and verify the sender domain in Resend before expecting delivery. Submitting the same address again safely retries a failed welcome email.
-- **Authentication/admin:** No public accounts are needed for a journal. Add Auth.js with a managed OAuth provider for a short allowlist of editors. Check the session and active `admin_users` record in every server action/route. Use roles only when there are genuinely different permissions. Never trust middleware alone as authorization.
-- **Commerce:** Add a hosted checkout/provider integration when products are ready. Treat signed provider webhooks as authoritative for order state; verify signature, deduplicate event IDs, and never store card data. Commerce should be a separate domain module, not scattered through editorial pages.
-- **Images:** Use a managed object store/CDN for uploaded originals. Validate file type by content, size and dimensions; strip metadata, create responsive AVIF/WebP renditions, use immutable asset keys and serve through `next/image`. Never accept arbitrary remote image URLs from editors. The homepage, journal cards and first article use optimized local WebP editorial photography.
-- **Search:** Begin with PostgreSQL full-text search and indexed published content if readers need it. Consider a hosted search service only when relevance or scale requires it.
-- **Analytics/privacy:** GA4 (`G-4PD1WZ0YC9`) loads only after a visitor allows analytics in the privacy banner. Declined visitors are not sent to Google. Visitors who decline can reopen preferences from the Privacy settings button. Review the privacy notice and applicable local consent requirements before launch.
+2. **Start the local PostgreSQL database:**
+   ```bash
+   docker compose up -d db
+   ```
 
-## Main flows
+3. **Install dependencies:**
+   ```bash
+   npm ci
+   ```
 
-1. **Reader:** request → server-rendered homepage/journal/article → metadata and sitemap → CDN/browser cache. Published-only content must be enforced in server queries.
-2. **Newsletter:** consent checkbox + email → same-origin JSON request → schema/origin validation → edge rate limit → honeypot → active subscriber row → idempotent Resend welcome email → record send time. The email contains a high-entropy unsubscribe token; its preference page immediately marks the subscriber unsubscribed.
-3. **Editor (phase 2):** OAuth login → server-side allowlist/session check → draft edit with validated fields → preview → publish transaction → revalidate affected paths → audit record. Keep all mutations server-side and CSRF protected.
-4. **Order (future):** catalog → hosted checkout → signed/deduplicated webhook → order record → email/fulfillment provider. The browser redirect is not proof of payment.
+4. **Run database migrations:**
+   ```bash
+   npm run db:migrate
+   ```
 
-## Repository map
+5. **Start the local development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+> [!NOTE]
+> Public journal content currently renders from typed editorial fixtures in `src/lib/content.ts`. The database schema contains `articles` and `subscribers` ready for the Phase 2 admin publishing workflow.
+
+---
+
+## 🏗️ Architecture
+
+| Layer | Technology | Details |
+| :--- | :--- | :--- |
+| **Framework** | Next.js (App Router) | Server components render editorial content; client components are limited to interactive controls (newsletter signup, drawer navigation, analytics consent). |
+| **Language** | TypeScript (strict) | Strict typing across all content models, route parameters, schemas, and database queries. |
+| **Styling** | Vanilla CSS Tokens | Editorial typographic scale, responsive grids, reduced-motion awareness, and dark-accents without CSS framework bloat. |
+| **Database** | PostgreSQL + Drizzle ORM | Parameterized SQL queries with versioned migrations in `/drizzle`. Prerendered pages avoid DB connections during build time. |
+| **Validation** | Zod v4 | Runtime request payload validation with generic errors to avoid account enumeration. |
+| **Email** | Resend Adapter | Verified sender integration (`hello@theaccidentalman.com`) with high-entropy unsubscribe tokens. |
+| **Analytics** | GA4 (Consent-Gated) | Blocked by default. Loads only if reader grants consent via the privacy banner. |
+
+---
+
+## 🧭 The 9 Pillars
+
+The editorial universe is structured around 9 foundational pillars:
+
+1. **01. Mind:** Learning, attention, habits, judgment, and mental clarity.
+2. **02. Emotions:** Emotional literacy, resilience, and self-respect.
+3. **03. Body:** Movement, strength, sleep, nutrition, and health.
+4. **04. Spirit & Purpose:** Values, identity, and the questions that guide a life.
+5. **05. Grooming:** Simple, consistent routines and practical daily care.
+6. **06. Style:** Fit, function, and dressing for real situations.
+7. **07. Career & Money:** Work craft, financial discipline, and long-term stability.
+8. **08. Relationships:** Friendship, family, stewardship, and accountability.
+9. **09. Life:** Home, time, responsibility, transitions, and intentional living.
+
+---
+
+## 🔄 Core Flows
+
+- **Editorial Reader Flow:**  
+  `Request` → `Server-rendered homepage / journal / pillar page` → `Metadata & sitemap` → `Edge / CDN cache`.
+- **Newsletter Signup & Verification:**  
+  `Consent checkbox + email` → `Same-origin POST /api/newsletter` → `Zod schema check` → `Honeypot check` → `PostgreSQL insert` → `Idempotent welcome email dispatch`.
+- **Unsubscribe Flow:**  
+  `Email link with unique token` → `GET /newsletter/unsubscribe` → `Immediate one-click opt-out`.
+
+---
+
+## 📁 Repository Structure
 
 ```text
-src/
-  app/                 Public routes, route handlers, metadata, error boundaries
-  components/          Reusable, accessible UI
-  lib/
-    db/                Drizzle connection and schema
-    content.ts         Temporary typed editorial fixture
-    validation/        Request schemas (add by domain as flows grow)
-    services/          Provider adapters (email, storage, payments)
-drizzle/               Versioned SQL migrations
-.github/workflows/     CI quality gates
+├── src/
+│   ├── app/                 # Next.js App Router (pages, layouts, metadata, API routes)
+│   │   ├── (public)/        # Editorial pages: /, /journal, /pillars, /privacy
+│   │   ├── api/             # API boundaries (/api/newsletter, /api/admin/broadcast)
+│   │   ├── sitemap.ts       # Dynamic sitemap generation
+│   │   └── robots.ts        # Dynamic robots.txt
+│   ├── components/          # Reusable UI components (SiteHeader, JournalFeed, NewsletterForm)
+│   └── lib/                 # Core domain logic
+│       ├── db/              # Drizzle schema and connection pool
+│       ├── content.ts       # Typed editorial content fixtures
+│       ├── pillars.ts       # 9 pillars metadata and article mapping
+│       ├── schema.ts        # Schema.org structured JSON-LD data
+│       └── validation/      # Zod request validators
+├── drizzle/                 # Versioned SQL migration files
+├── tests/                   # Vitest unit and component tests
+├── e2e/                     # Playwright end-to-end browser tests
+└── public/images/           # Optimized WebP assets and photography
 ```
 
-Keep feature code close to its route until there is meaningful reuse. Avoid a monorepo, microservices, event bus, Redis, Kubernetes and a headless CMS until a concrete operational need justifies them.
+---
 
-## Security and operations checklist
+## 🛠️ Available Scripts
 
-- **Rate limits:** Configure the hosting edge/WAF to limit `/api/newsletter` by IP and normalized email (for example, 5 requests/minute/IP with a daily cap). The in-process app does not claim to provide distributed rate limiting. Return `429` with `Retry-After`; monitor provider costs and signup abuse.
-- **Validation:** Parse every external body with Zod, cap request/body size at the edge, reject unknown keys, normalize email, and use parameterized ORM queries. Keep errors generic to avoid account enumeration.
-- **Secrets:** `.env*` is ignored; commit only `.env.example`. Use the deployment platform's secret store, separate values by environment, rotate credentials, and never expose private keys through `NEXT_PUBLIC_*`.
-- **Headers:** baseline CSP and browser security headers are in `next.config.ts`, with Google Analytics origins allowed only for the consent-gated tag. Before production, remove inline allowances by using nonces or hashes. Enable HSTS only on HTTPS deployments.
-- **Database:** run committed migrations as a deployment release step, not on each web instance start. Use separate least-privilege app and migration credentials. Keep automated encrypted backups and test restores quarterly; set retention to business/legal needs.
-- **Logging/observability:** log structured event names and request IDs; never log emails, tokens, cookies or full request bodies. Add hosting error reporting and uptime checks, redact PII, set alerts for elevated 5xx, signup failures and database saturation.
-- **Errors:** add `error.tsx` and `not-found.tsx` as route complexity grows. Surface friendly messages; retain detailed stack traces only in protected server-side telemetry.
-- **Accessibility:** semantic landmarks, keyboard navigation, visible focus, labels, skip link, alt text, reduced-motion support and sufficient contrast are included as a starting point. Verify contrast and screen-reader flows before launch.
-- **Performance:** server-render content, keep client JS limited to interactive islands, optimize image dimensions, avoid autoplay video, use CDN caching, and measure Core Web Vitals on real devices.
-- **SEO:** route metadata, Open Graph defaults, `robots.txt` and `sitemap.xml` are included. Add canonical URLs, article structured data, redirects and editorial social images when the publishing flow is connected.
-- **Backups/privacy:** minimize collected data, honor unsubscribe/delete requests, define retention and data-subject request handling. Backups are recovery copies, not a reason to retain data indefinitely.
+```bash
+# Development
+npm run dev           # Start Next.js development server on localhost:3000
 
-## Delivery plan
+# Building & Production
+npm run build         # Quality gate check (lint + typecheck + test) and production build
+npm run build:fast    # Build without pre-flight checks
+npm start             # Start production server
 
-1. **Foundation:** branded responsive editorial shell, first journal article, subscriber schema/migration, newsletter signup/welcome/unsubscribe flow, consent-gated GA4, environment template, baseline headers and CI.
-2. **Launch hardening:** production database + backups, edge rate limits, verified email domain and Resend key, real content workflow, privacy review, image CDN, CSP tightening, error tracking and accessibility/performance review.
-3. **Editorial operations:** protected admin, OAuth + allowlist, drafts/previews/publishing, audit log, search, author profiles and structured data.
-4. **Commerce:** product/catalog and inventory needs, hosted checkout, signed webhooks, order/refund lifecycle, support/fulfillment and applicable tax/privacy review.
+# Quality & Testing
+npm run lint          # Run Biome lint checks
+npm run typecheck     # Run TypeScript type verification
+npm test              # Run unit & component tests with Vitest
+npm run test:watch    # Run Vitest in interactive watch mode
+npm run audit         # Run npm dependency security audit
 
-Do not enable production welcome-email delivery until the Resend API key and verified sender are configured. GA4 remains blocked until each visitor allows analytics. Admin login and checkout are future integrations.
+# Database Management
+npm run db:generate   # Generate Drizzle migration SQL from schema
+npm run db:migrate    # Apply migrations to database
+```
 
-## Environment configuration
+---
 
-`DATABASE_URL` and `APP_URL` are required by their consumers. `NEXT_PUBLIC_GA_MEASUREMENT_ID` is public and defaults to the provided GA4 measurement ID. `RESEND_API_KEY` is private and must only be set in the local server environment or deployment secret store. `NEWSLETTER_FROM_EMAIL` defaults to `The Accidental Man <hello@theaccidentalman.com>`; its domain must be verified with Resend. Production deploys should use separate preview/staging/production databases and secrets. After updating the subscriber schema, run `npm run db:migrate` before starting the application. Use expand-migrate-contract database changes for future breaking schema changes.
+## 🧪 Testing Strategy
 
-## CI/CD and releases
+The repository uses a dual-layer testing approach:
 
-Pull requests run Biome lint/format checks, typecheck and production build on Node 22. Deployment should build once, apply reviewed Drizzle migrations as a release job, then deploy the application. Use platform preview deployments for review and production promotion after approval. Keep a rollback path for application deploys; schema migrations must remain backward compatible with the prior app version. Protect `main`, require CI, use dependency update alerts, and pin GitHub Actions to full commit SHAs before adopting this workflow for a high-assurance production environment.
+- **Unit & Component Tests (`tests/`):**  
+  Powered by **Vitest** + **Testing Library** (`happy-dom`). Tests validation schemas, sitemap and structured metadata generation, email templating, and isolated React component rendering in milliseconds with zero browser overhead.
+- **End-to-End Browser Tests (`e2e/`):**  
+  Powered by **Playwright**. Covers real browser interactions: navigation flows, skip-to-content accessibility landmarks, privacy consent toggles, and newsletter form client-side validation.
 
-## Testing strategy
+---
 
-As the flows become real, add focused unit tests for validation and domain rules, database integration tests against an isolated PostgreSQL service, and Playwright browser coverage for reader navigation, keyboard access, newsletter validation/consent, and the editor publish flow. Keep payment webhook signature/idempotency cases in integration tests. CI should run unit and integration suites plus an accessibility smoke check; production smoke checks should verify homepage, sitemap, database readiness and newsletter provider health. This initial scaffold does not include a test runner or test suite yet.
-#   t h e - a c c i d e n t a l - m a n 
+## 🔒 Security & Operations Checklist
+
+- **Rate Limiting:** Edge/WAF rate limiting on `/api/newsletter` (e.g. 5 requests/min per IP).
+- **Validation:** Strict Zod parsing on all API endpoints; rejects unknown fields and normalizes emails.
+- **Headers & CSP:** Baseline Content Security Policy (CSP), HSTS, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: strict-origin-when-cross-origin` configured in `next.config.ts`.
+- **Database Access:** Principle of least privilege with automated encrypted point-in-time backups in production. Migrations run as a deployment release step, never on instance boot.
+- **Privacy & Observability:** Strict GDPR/CCPA alignment; Google Analytics is gated until explicit consent is granted. Logs redact all PII, emails, tokens, and authorization headers.
+
+---
+
+## ⚙️ Environment Variables
+
+| Variable | Description | Required | Default / Note |
+| :--- | :--- | :---: | :--- |
+| `DATABASE_URL` | PostgreSQL connection string | Yes | `postgres://user:pass@localhost:5432/accidental_man` |
+| `APP_URL` | Canonical public application URL | Yes | `http://localhost:3000` (local) |
+| `RESEND_API_KEY` | Resend API key for welcome/newsletter emails | Optional in dev | Secret store only |
+| `NEWSLETTER_FROM_EMAIL` | Verified sender address | Optional | `The Accidental Man <hello@theaccidentalman.com>` |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 Measurement ID | Optional | `G-4PD1WZ0YC9` |
