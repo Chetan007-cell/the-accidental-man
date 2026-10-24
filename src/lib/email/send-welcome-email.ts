@@ -56,6 +56,11 @@ export async function sendWelcomeEmail({
   });
 
   if (!response.ok) {
-    throw new Error(`resend_request_failed_${response.status}`);
+    const errorData = await response.json().catch(() => null);
+    const detail =
+      errorData && typeof errorData === "object" && "message" in errorData
+        ? String(errorData.message)
+        : `status_${response.status}`;
+    throw new Error(`resend_request_failed: ${detail}`);
   }
 }

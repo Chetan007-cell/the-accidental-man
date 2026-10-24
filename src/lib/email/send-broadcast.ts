@@ -85,7 +85,12 @@ export async function broadcastBlogPost(
       if (response.ok) {
         sentCount++;
       } else {
-        errors.push(`${subscriber.email}: status ${response.status}`);
+        const errorData = await response.json().catch(() => null);
+        const detail =
+          errorData && typeof errorData === "object" && "message" in errorData
+            ? String(errorData.message)
+            : `status ${response.status}`;
+        errors.push(`${subscriber.email}: ${detail}`);
       }
     } catch (err) {
       errors.push(
