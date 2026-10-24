@@ -16,8 +16,11 @@ export async function broadcastBlogPost(
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) throw new Error("resend_not_configured");
 
-  const appUrl = process.env.APP_URL;
-  if (!appUrl) throw new Error("app_url_not_configured");
+  const appUrl =
+    process.env.APP_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://theaccidentalman.com");
 
   const from =
     process.env.NEWSLETTER_FROM_EMAIL ??

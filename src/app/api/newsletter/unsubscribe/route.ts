@@ -10,17 +10,31 @@ const bodySchema = z
   .strict();
 
 export async function POST(request: Request) {
-  const expectedOrigin = process.env.APP_URL;
   const origin = request.headers.get("origin");
-  if (!expectedOrigin) {
-    return NextResponse.json(
-      { error: "Service is not configured" },
-      { status: 503 },
-    );
-  }
+  const configuredOrigin =
+    process.env.APP_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : undefined);
+
   if (origin) {
     try {
-      if (new URL(origin).origin !== new URL(expectedOrigin).origin) {
+      const incomingOrigin = new URL(origin).origin;
+      const allowedOrigins = new Set<string>([
+        "https://theaccidentalman.com",
+        "https://www.theaccidentalman.com",
+      ]);
+      if (configuredOrigin) {
+        allowedOrigins.add(new URL(configuredOrigin).origin);
+      }
+      try {
+        const requestOrigin = new URL(request.url).origin;
+        if (requestOrigin && requestOrigin !== "null") {
+          allowedOrigins.add(requestOrigin);
+        }
+      } catch {}
+
+      if (!allowedOrigins.has(incomingOrigin)) {
         return NextResponse.json({ error: "Invalid request" }, { status: 403 });
       }
     } catch {
