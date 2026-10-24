@@ -54,12 +54,17 @@ export async function broadcastBlogPost(
       appUrl,
     ).toString();
 
+    const imageUrl = story.image
+      ? new URL(story.image, appUrl).toString()
+      : undefined;
+
     const { subject, html, text } = renderBlogBroadcastEmail({
       title: story.title,
       excerpt: story.excerpt,
       category: story.category,
       readingTimeMinutes: story.readingTimeMinutes,
       slug: story.slug,
+      imageUrl,
       unsubscribeUrl,
       appUrl,
     });

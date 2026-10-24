@@ -10,6 +10,7 @@ export interface BlogBroadcastParams {
   category: string;
   readingTimeMinutes: number;
   slug: string;
+  imageUrl?: string;
   unsubscribeUrl: string;
   appUrl: string;
 }
@@ -63,28 +64,31 @@ export function renderWelcomeEmail({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background-color:#f6f5ef;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1c1d1a;-webkit-font-smoothing:antialiased;">
+<body style="margin:0;padding:0;background-color:#faf9f5;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111111;-webkit-font-smoothing:antialiased;">
   <!-- Preheader text -->
-  <div style="display:none;font-size:1px;color:#f6f5ef;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+  <div style="display:none;font-size:1px;color:#faf9f5;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
     A man isn’t born. He’s built. Welcome to the quiet craft.
   </div>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f6f5ef;padding:36px 12px 60px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#faf9f5;padding:36px 12px 60px;">
     <tr>
       <td align="center">
         <!-- Main Card Container -->
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background-color:#ffffff;border:1px solid #e7e5dc;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background-color:#ffffff;border:1px solid #e7e5dc;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(17,17,17,0.06);">
           
-          <!-- Editorial Header -->
+          <!-- Editorial Header with Brand Logo -->
           <tr>
-            <td style="padding:32px 36px 24px;border-bottom:1px solid #f0eee6;text-align:center;background-color:#faf9f5;">
-              <p style="margin:0 0 6px;font-size:9.5px;letter-spacing:0.24em;color:#87867f;text-transform:uppercase;font-weight:600;">
+            <td style="padding:34px 36px 26px;border-bottom:1px solid #e7e5dc;text-align:center;background-color:#faf9f5;border-top:3px solid #111111;">
+              <a href="${appUrl}" style="text-decoration:none;display:inline-block;" target="_blank">
+                <img src="${appUrl}/images/logo-mark.png" alt="The Accidental Man Logo" width="56" height="33" border="0" style="display:block;margin:0 auto 14px;border:0;width:56px;height:auto;max-width:56px;outline:none;" />
+              </a>
+              <p style="margin:0 0 6px;font-size:9.5px;letter-spacing:0.24em;color:#a36130;text-transform:uppercase;font-weight:700;">
                 VOL. 01 · FIELD NOTES &amp; ESSAYS
               </p>
-              <h1 style="margin:0;font-size:16px;letter-spacing:0.18em;font-weight:700;color:#141413;text-transform:uppercase;">
+              <h1 style="margin:0;font-size:16px;letter-spacing:0.2em;font-weight:700;color:#111111;text-transform:uppercase;">
                 THE ACCIDENTAL MAN
               </h1>
-              <p style="margin:6px 0 0;font-size:9px;letter-spacing:0.26em;color:#5a5c56;text-transform:uppercase;font-weight:600;">
+              <p style="margin:6px 0 0;font-size:9px;letter-spacing:0.26em;color:#66635d;text-transform:uppercase;font-weight:600;">
                 A FACTORY FOR THE MODERN MAN
               </p>
             </td>
@@ -93,36 +97,36 @@ export function renderWelcomeEmail({
           <!-- Letter Body -->
           <tr>
             <td style="padding:40px 36px 32px;">
-              <p style="margin:0 0 14px;font-size:10px;letter-spacing:0.22em;color:#7e5e38;text-transform:uppercase;font-weight:700;">
+              <p style="margin:0 0 14px;font-size:10px;letter-spacing:0.22em;color:#a36130;text-transform:uppercase;font-weight:700;">
                 WELCOME TO THE JOURNAL
               </p>
               
-              <h2 style="margin:0 0 20px;font-family:Georgia,Cambria,serif;font-size:30px;line-height:1.2;font-weight:400;color:#141413;">
+              <h2 style="margin:0 0 20px;font-family:Georgia,Cambria,'Times New Roman',serif;font-size:30px;line-height:1.2;font-weight:400;color:#111111;">
                 A man isn’t born.<br><em style="font-style:italic;">He’s built.</em>
               </h2>
 
-              <p style="margin:0 0 18px;font-size:15.5px;line-height:1.75;color:#2c2d28;">
+              <p style="margin:0 0 18px;font-size:15.5px;line-height:1.75;color:#2c2b29;">
                 Welcome to the quiet craft. Manhood is not an innate status, a performance, or a rigid checklist. It is built every day through the choices you make, the habits you keep, the questions you dare to ask, and the person you choose to become.
               </p>
 
-              <p style="margin:0 0 28px;font-size:15.5px;line-height:1.75;color:#2c2d28;">
-                We built <strong>The Accidental Man</strong> as an unhurried space for men who want substance over noise: thoughtful field notes, emotional clarity, and grounded guidance.
+              <p style="margin:0 0 28px;font-size:15.5px;line-height:1.75;color:#2c2b29;">
+                We built <strong>The Accidental Man</strong> as an unhurried space for men who want substance over noise: thoughtful field notes, emotional clarity, and grounded guidance across mind, body, character, and everyday life.
               </p>
 
               <!-- Three Tenets Spotlight -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#faf9f5;border-left:3px solid #141413;padding:20px 22px;margin:0 0 32px;border-radius:0 4px 4px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#faf9f5;border:1px solid #e7e5dc;border-left:3px solid #111111;padding:20px 22px;margin:0 0 32px;border-radius:0 4px 4px 0;">
                 <tr>
                   <td>
-                    <p style="margin:0 0 12px;font-size:10px;letter-spacing:0.18em;color:#87867f;text-transform:uppercase;font-weight:700;">
+                    <p style="margin:0 0 12px;font-size:10px;letter-spacing:0.18em;color:#a36130;text-transform:uppercase;font-weight:700;">
                       OUR CORE TENETS
                     </p>
-                    <p style="margin:0 0 10px;font-size:13.5px;line-height:1.6;color:#1c1d1a;">
+                    <p style="margin:0 0 10px;font-size:13.5px;line-height:1.6;color:#111111;">
                       <strong>01 Become</strong> — Starting exactly where you are without shame. Unlearning noise.
                     </p>
-                    <p style="margin:0 0 10px;font-size:13.5px;line-height:1.6;color:#1c1d1a;">
+                    <p style="margin:0 0 10px;font-size:13.5px;line-height:1.6;color:#111111;">
                       <strong>02 Maintain</strong> — Daily architecture: routines, clarity, resilience, and showing up.
                     </p>
-                    <p style="margin:0;font-size:13.5px;line-height:1.6;color:#1c1d1a;">
+                    <p style="margin:0;font-size:13.5px;line-height:1.6;color:#111111;">
                       <strong>03 Evolve</strong> — Deepening your craft, cultivating friendships, and whole living.
                     </p>
                   </td>
@@ -133,17 +137,17 @@ export function renderWelcomeEmail({
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e7e5dc;background-color:#faf9f5;border-radius:6px;padding:24px;margin:0 0 32px;">
                 <tr>
                   <td>
-                    <p style="margin:0 0 8px;font-size:9.5px;letter-spacing:0.2em;color:#7e5e38;text-transform:uppercase;font-weight:700;">
+                    <p style="margin:0 0 8px;font-size:9.5px;letter-spacing:0.2em;color:#a36130;text-transform:uppercase;font-weight:700;">
                       FLAGSHIP ESSAY · 5 MIN READ
                     </p>
-                    <h3 style="margin:0 0 10px;font-family:Georgia,Cambria,serif;font-size:22px;line-height:1.3;font-weight:500;color:#141413;">
+                    <h3 style="margin:0 0 10px;font-family:Georgia,Cambria,'Times New Roman',serif;font-size:22px;line-height:1.3;font-weight:500;color:#111111;">
                       A Man Isn’t Born. He’s Built.
                     </h3>
                     <p style="margin:0 0 20px;font-size:14px;line-height:1.65;color:#454740;">
                       “Becoming a man is not about having everything figured out; it is about becoming more willing and able to figure things out.”
                     </p>
                     <div>
-                      <a href="${articleUrl}" style="background-color:#141413;color:#ffffff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:12px 24px;border-radius:3px;display:inline-block;">
+                      <a href="${articleUrl}" style="background-color:#111111;color:#ffffff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;padding:12px 24px;border-radius:3px;display:inline-block;">
                         Read the essay &#8599;
                       </a>
                     </div>
@@ -151,10 +155,10 @@ export function renderWelcomeEmail({
                 </tr>
               </table>
 
-              <p style="margin:0 0 8px;font-size:15px;line-height:1.7;color:#2c2d28;">
-                We’re honored to have you with us.
+              <p style="margin:0 0 8px;font-size:15px;line-height:1.7;color:#2c2b29;">
+                We’re honored to have you with us in the arena.
               </p>
-              <p style="margin:0;font-family:Georgia,Cambria,serif;font-style:italic;font-size:16px;color:#141413;">
+              <p style="margin:0;font-family:Georgia,Cambria,'Times New Roman',serif;font-style:italic;font-size:16px;color:#111111;">
                 The Accidental Man Editorial Desk
               </p>
             </td>
@@ -162,22 +166,25 @@ export function renderWelcomeEmail({
 
           <!-- Editorial Footer -->
           <tr>
-            <td style="padding:28px 36px 32px;background-color:#faf9f5;border-top:1px solid #f0eee6;text-align:center;">
-              <p style="margin:0 0 12px;font-size:10px;letter-spacing:0.16em;color:#87867f;text-transform:uppercase;font-weight:600;">
-                CONTACT &amp; EDITORIAL DESK
+            <td style="padding:30px 36px 34px;background-color:#faf9f5;border-top:1px solid #e7e5dc;text-align:center;">
+              <a href="${appUrl}" style="text-decoration:none;display:inline-block;" target="_blank">
+                <img src="${appUrl}/images/logo-mark.png" alt="The Accidental Man" width="38" height="22" border="0" style="display:block;margin:0 auto 12px;opacity:0.85;width:38px;height:auto;border:0;outline:none;" />
+              </a>
+              <p style="margin:0 0 8px;font-size:10px;letter-spacing:0.2em;color:#a36130;text-transform:uppercase;font-weight:700;">
+                THE ACCIDENTAL MAN
               </p>
-              <p style="margin:0 0 16px;font-size:13px;color:#141413;">
-                <a href="mailto:hello@theaccidentalman.com" style="color:#141413;font-weight:600;text-decoration:underline;">hello@theaccidentalman.com</a>
+              <p style="margin:0 0 14px;font-size:12.5px;color:#2c2b29;">
+                Editorial Desk: <a href="mailto:hello@theaccidentalman.com" style="color:#111111;font-weight:600;text-decoration:underline;">hello@theaccidentalman.com</a>
               </p>
-              <p style="margin:0 0 16px;font-size:12px;color:#5a5c56;">
-                <a href="${appUrl}/journal" style="color:#5a5c56;text-decoration:none;margin:0 8px;">The Journal</a> &bull;
-                <a href="${appUrl}/#pillars" style="color:#5a5c56;text-decoration:none;margin:0 8px;">Nine Pillars</a> &bull;
-                <a href="${appUrl}/privacy" style="color:#5a5c56;text-decoration:none;margin:0 8px;">Privacy Notice</a>
+              <p style="margin:0 0 16px;font-size:11.5px;color:#66635d;">
+                <a href="${appUrl}/journal" style="color:#66635d;text-decoration:none;margin:0 8px;font-weight:500;">The Journal</a> &bull;
+                <a href="${appUrl}/#pillars" style="color:#66635d;text-decoration:none;margin:0 8px;font-weight:500;">Nine Pillars</a> &bull;
+                <a href="${appUrl}/privacy" style="color:#66635d;text-decoration:none;margin:0 8px;font-weight:500;">Privacy Notice</a>
               </p>
-              <hr style="border:0;border-top:1px solid #e7e5dc;margin:18px auto;max-width:240px;">
-              <p style="margin:0;font-size:11px;line-height:1.6;color:#87867f;">
+              <hr style="border:0;border-top:1px solid #e7e5dc;margin:18px auto;max-width:220px;">
+              <p style="margin:0;font-size:11px;line-height:1.6;color:#908d85;">
                 You are receiving this note because you subscribed to The Accidental Man.<br>
-                To leave the list at any time, <a href="${unsubscribeUrl}" style="color:#87867f;text-decoration:underline;">unsubscribe here</a>.
+                To leave the list at any time, <a href="${unsubscribeUrl}" style="color:#66635d;text-decoration:underline;">unsubscribe here</a>.
               </p>
             </td>
           </tr>
@@ -198,6 +205,7 @@ export function renderBlogBroadcastEmail({
   category,
   readingTimeMinutes,
   slug,
+  imageUrl,
   unsubscribeUrl,
   appUrl,
 }: BlogBroadcastParams) {
@@ -226,52 +234,68 @@ export function renderBlogBroadcastEmail({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background-color:#f6f5ef;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1c1d1a;-webkit-font-smoothing:antialiased;">
-  <div style="display:none;font-size:1px;color:#f6f5ef;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+<body style="margin:0;padding:0;background-color:#faf9f5;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111111;-webkit-font-smoothing:antialiased;">
+  <!-- Preheader text -->
+  <div style="display:none;font-size:1px;color:#faf9f5;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
     ${excerpt}
   </div>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f6f5ef;padding:36px 12px 60px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#faf9f5;padding:36px 12px 60px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background-color:#ffffff;border:1px solid #e7e5dc;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+        <!-- Main Card Container -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background-color:#ffffff;border:1px solid #e7e5dc;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(17,17,17,0.06);">
           
-          <!-- Editorial Header -->
+          <!-- Editorial Header with Brand Logo -->
           <tr>
-            <td style="padding:28px 36px 20px;border-bottom:1px solid #f0eee6;text-align:center;background-color:#faf9f5;">
-              <h1 style="margin:0;font-size:15px;letter-spacing:0.18em;font-weight:700;color:#141413;text-transform:uppercase;">
+            <td style="padding:32px 36px 24px;border-bottom:1px solid #e7e5dc;text-align:center;background-color:#faf9f5;border-top:3px solid #111111;">
+              <a href="${appUrl}" style="text-decoration:none;display:inline-block;" target="_blank">
+                <img src="${appUrl}/images/logo-mark.png" alt="The Accidental Man Logo" width="54" height="32" border="0" style="display:block;margin:0 auto 12px;width:54px;height:auto;max-width:54px;outline:none;" />
+              </a>
+              <h1 style="margin:0;font-size:15px;letter-spacing:0.2em;font-weight:700;color:#111111;text-transform:uppercase;">
                 THE ACCIDENTAL MAN
               </h1>
-              <p style="margin:4px 0 0;font-size:9px;letter-spacing:0.24em;color:#87867f;text-transform:uppercase;font-weight:600;">
-                NEW ESSAY DISPATCH · ${category.toUpperCase()}
+              <p style="margin:6px 0 0;font-size:9.5px;letter-spacing:0.22em;color:#a36130;text-transform:uppercase;font-weight:700;">
+                NEW ESSAY DISPATCH &bull; ${category.toUpperCase()}
               </p>
             </td>
           </tr>
 
           <!-- Article Content -->
           <tr>
-            <td style="padding:40px 36px 36px;">
-              <p style="margin:0 0 10px;font-size:10px;letter-spacing:0.2em;color:#7e5e38;text-transform:uppercase;font-weight:700;">
+            <td style="padding:36px 36px 36px;">
+              ${
+                imageUrl
+                  ? `
+              <div style="margin:0 0 24px;border-radius:4px;overflow:hidden;border:1px solid #e7e5dc;">
+                <a href="${articleUrl}" style="text-decoration:none;display:block;" target="_blank">
+                  <img src="${imageUrl}" alt="${title}" width="508" style="display:block;width:100%;max-width:508px;height:auto;border:0;" />
+                </a>
+              </div>
+              `
+                  : ""
+              }
+              <p style="margin:0 0 10px;font-size:10px;letter-spacing:0.2em;color:#a36130;text-transform:uppercase;font-weight:700;">
                 ${category.toUpperCase()} &bull; ${readingTimeMinutes} MIN READ
               </p>
               
-              <h2 style="margin:0 0 20px;font-family:Georgia,Cambria,serif;font-size:28px;line-height:1.25;font-weight:400;color:#141413;">
+              <h2 style="margin:0 0 18px;font-family:Georgia,Cambria,'Times New Roman',serif;font-size:27px;line-height:1.25;font-weight:400;color:#111111;">
                 ${title}
               </h2>
 
-              <p style="margin:0 0 28px;font-size:16px;line-height:1.75;color:#2c2d28;">
+              <p style="margin:0 0 28px;font-size:16px;line-height:1.75;color:#2c2b29;">
                 ${excerpt}
               </p>
 
               <div style="margin:0 0 32px;">
-                <a href="${articleUrl}" style="background-color:#141413;color:#ffffff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:13px 28px;border-radius:3px;display:inline-block;">
+                <a href="${articleUrl}" style="background-color:#111111;color:#ffffff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;padding:13px 28px;border-radius:3px;display:inline-block;">
                   Read the full essay &#8599;
                 </a>
               </div>
 
               <hr style="border:0;border-top:1px solid #e7e5dc;margin:32px 0 24px;">
 
-              <p style="margin:0;font-family:Georgia,Cambria,serif;font-style:italic;font-size:15px;color:#141413;">
+              <p style="margin:0;font-family:Georgia,Cambria,'Times New Roman',serif;font-style:italic;font-size:15px;color:#111111;">
                 The Accidental Man Editorial Desk
               </p>
             </td>
@@ -279,12 +303,125 @@ export function renderBlogBroadcastEmail({
 
           <!-- Editorial Footer -->
           <tr>
-            <td style="padding:24px 36px 28px;background-color:#faf9f5;border-top:1px solid #f0eee6;text-align:center;">
-              <p style="margin:0 0 10px;font-size:12px;color:#141413;">
-                Editorial Desk: <a href="mailto:hello@theaccidentalman.com" style="color:#141413;font-weight:600;text-decoration:underline;">hello@theaccidentalman.com</a>
+            <td style="padding:28px 36px 32px;background-color:#faf9f5;border-top:1px solid #e7e5dc;text-align:center;">
+              <a href="${appUrl}" style="text-decoration:none;display:inline-block;" target="_blank">
+                <img src="${appUrl}/images/logo-mark.png" alt="The Accidental Man" width="34" height="20" border="0" style="display:block;margin:0 auto 10px;opacity:0.85;width:34px;height:auto;border:0;outline:none;" />
+              </a>
+              <p style="margin:0 0 10px;font-size:12px;color:#2c2b29;">
+                Editorial Desk: <a href="mailto:hello@theaccidentalman.com" style="color:#111111;font-weight:600;text-decoration:underline;">hello@theaccidentalman.com</a>
               </p>
-              <p style="margin:0;font-size:11px;line-height:1.6;color:#87867f;">
-                Sent to subscribers of The Accidental Man. <a href="${unsubscribeUrl}" style="color:#87867f;text-decoration:underline;">Unsubscribe</a> at any time.
+              <p style="margin:0;font-size:11px;line-height:1.6;color:#908d85;">
+                Sent to subscribers of The Accidental Man. <a href="${unsubscribeUrl}" style="color:#66635d;text-decoration:underline;">Unsubscribe</a> at any time.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  return { subject, html, text };
+}
+
+export function renderCustomBroadcastEmail({
+  subject,
+  headline,
+  bodyParagraphs,
+  ctaLabel,
+  ctaUrl,
+  unsubscribeUrl,
+  appUrl,
+}: CustomBroadcastParams) {
+  const text = [
+    "THE ACCIDENTAL MAN · EDITORIAL DISPATCH",
+    "==================================================",
+    "",
+    headline.toUpperCase(),
+    "",
+    ...bodyParagraphs,
+    "",
+    ...(ctaLabel && ctaUrl ? [`${ctaLabel}: ${ctaUrl}`, ""] : []),
+    "--------------------------------------------------",
+    "Editorial desk: hello@theaccidentalman.com",
+    `Unsubscribe at any time: ${unsubscribeUrl}`,
+  ].join("\n");
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${subject}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#faf9f5;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111111;-webkit-font-smoothing:antialiased;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#faf9f5;padding:36px 12px 60px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background-color:#ffffff;border:1px solid #e7e5dc;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(17,17,17,0.06);">
+          
+          <!-- Editorial Header with Brand Logo -->
+          <tr>
+            <td style="padding:32px 36px 24px;border-bottom:1px solid #e7e5dc;text-align:center;background-color:#faf9f5;border-top:3px solid #111111;">
+              <a href="${appUrl}" style="text-decoration:none;display:inline-block;" target="_blank">
+                <img src="${appUrl}/images/logo-mark.png" alt="The Accidental Man Logo" width="54" height="32" border="0" style="display:block;margin:0 auto 12px;width:54px;height:auto;max-width:54px;outline:none;" />
+              </a>
+              <h1 style="margin:0;font-size:15px;letter-spacing:0.2em;font-weight:700;color:#111111;text-transform:uppercase;">
+                THE ACCIDENTAL MAN
+              </h1>
+              <p style="margin:6px 0 0;font-size:9.5px;letter-spacing:0.22em;color:#a36130;text-transform:uppercase;font-weight:700;">
+                EDITORIAL DISPATCH
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:36px 36px 36px;">
+              <h2 style="margin:0 0 20px;font-family:Georgia,Cambria,'Times New Roman',serif;font-size:26px;line-height:1.3;font-weight:400;color:#111111;">
+                ${headline}
+              </h2>
+
+              ${bodyParagraphs
+                .map(
+                  (p) =>
+                    `<p style="margin:0 0 18px;font-size:15.5px;line-height:1.75;color:#2c2b29;">${p}</p>`,
+                )
+                .join("")}
+
+              ${
+                ctaLabel && ctaUrl
+                  ? `
+              <div style="margin:28px 0 32px;">
+                <a href="${ctaUrl}" style="background-color:#111111;color:#ffffff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;padding:13px 28px;border-radius:3px;display:inline-block;">
+                  ${ctaLabel} &#8599;
+                </a>
+              </div>
+              `
+                  : ""
+              }
+
+              <hr style="border:0;border-top:1px solid #e7e5dc;margin:32px 0 24px;">
+
+              <p style="margin:0;font-family:Georgia,Cambria,'Times New Roman',serif;font-style:italic;font-size:15px;color:#111111;">
+                The Accidental Man Editorial Desk
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:28px 36px 32px;background-color:#faf9f5;border-top:1px solid #e7e5dc;text-align:center;">
+              <a href="${appUrl}" style="text-decoration:none;display:inline-block;" target="_blank">
+                <img src="${appUrl}/images/logo-mark.png" alt="The Accidental Man" width="34" height="20" border="0" style="display:block;margin:0 auto 10px;opacity:0.85;width:34px;height:auto;border:0;outline:none;" />
+              </a>
+              <p style="margin:0 0 10px;font-size:12px;color:#2c2b29;">
+                Editorial Desk: <a href="mailto:hello@theaccidentalman.com" style="color:#111111;font-weight:600;text-decoration:underline;">hello@theaccidentalman.com</a>
+              </p>
+              <p style="margin:0;font-size:11px;line-height:1.6;color:#908d85;">
+                Sent to subscribers of The Accidental Man. <a href="${unsubscribeUrl}" style="color:#66635d;text-decoration:underline;">Unsubscribe</a> at any time.
               </p>
             </td>
           </tr>
