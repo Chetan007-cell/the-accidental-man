@@ -60,7 +60,7 @@ html {
 body {
   margin: 0;
   padding-top: var(--header-height);
-  background: whitesmoke;
+  background: white;
   color: var(--ink);
   font-family: var(--sans);
   font-size: 16px;
@@ -135,7 +135,7 @@ input:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1.3px solid var(--line);
   background: white;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -1786,17 +1786,17 @@ input:focus-visible {
 
 .footer-email-link {
   display: inline-block;
-  font-family: var(--sans);
+  font-family: var(--sans); 
   font-size: 15px;
   font-weight: 600;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.72);
   text-decoration: underline;
   text-underline-offset: 6px;
   transition: color var(--transition-fast);
 }
 
 .footer-email-link:hover {
-  color: black;
+  color: white;
 }
 
 .footer-nav,
