@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/font/google", () => ({
@@ -180,6 +182,61 @@ describe("JSON-LD: Structured Data & Schema.org", () => {
       expect(q["@type"]).toBe("Question");
       expect(q.name).toBeDefined();
       expect(q.acceptedAnswer.text).toBeDefined();
+    }
+  });
+});
+
+describe("SEO: Favicon & Search Icons", () => {
+  it("defines favicon, icon, and apple-touch-icon in root layout metadata", () => {
+    expect(rootMetadata.icons).toBeDefined();
+    const icons = rootMetadata.icons as {
+      icon: Array<{ url: string; sizes?: string; type?: string }>;
+      shortcut: string;
+      apple: Array<{ url: string; sizes?: string }>;
+    };
+
+    expect(icons.shortcut).toBe("/favicon.ico");
+    const iconUrls = icons.icon.map((i) => i.url);
+    expect(iconUrls).toContain("/favicon.ico");
+    // Google Search explicitly requires multiples of 48px square
+    expect(iconUrls).toContain("/icon-48x48.png");
+    expect(iconUrls).toContain("/icon-192x192.png");
+    expect(iconUrls).toContain("/icon-512x512.png");
+
+    const appleUrls = icons.apple.map((a) => a.url);
+    expect(appleUrls).toContain("/apple-touch-icon.png");
+  });
+
+  it("links to site webmanifest in root metadata", () => {
+    expect(rootMetadata.manifest).toBe("/site.webmanifest");
+  });
+
+  it("has physical favicon and icon files in public and app directories", () => {
+    const publicFiles = [
+      "favicon.ico",
+      "icon.png",
+      "icon-48x48.png",
+      "icon-96x96.png",
+      "icon-144x144.png",
+      "icon-192x192.png",
+      "icon-512x512.png",
+      "apple-touch-icon.png",
+      "site.webmanifest",
+    ];
+
+    for (const file of publicFiles) {
+      const filePath = path.join(process.cwd(), "public", file);
+      expect(fs.existsSync(filePath), `Expected public/${file} to exist`).toBe(
+        true,
+      );
+    }
+
+    const appFiles = ["favicon.ico", "icon.png", "apple-icon.png"];
+    for (const file of appFiles) {
+      const filePath = path.join(process.cwd(), "src", "app", file);
+      expect(fs.existsSync(filePath), `Expected src/app/${file} to exist`).toBe(
+        true,
+      );
     }
   });
 });
