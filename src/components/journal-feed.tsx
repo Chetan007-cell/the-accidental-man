@@ -90,7 +90,7 @@ export function JournalFeed({ stories }: { stories: Story[] }) {
         aria-label="Journal stories"
       >
         {filteredStories.map((story) => (
-          <article className="story-card" key={story.slug}>
+          <article className="story-card reveal-on-scroll" key={story.slug}>
             <Link
               href={`/journal/${story.slug}`}
               aria-label={`Read ${story.title}`}

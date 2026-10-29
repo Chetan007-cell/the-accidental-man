@@ -88,7 +88,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
 
       {/* Tagged Articles Section */}
       <section
-        className="pillar-articles-section"
+        className="pillar-articles-section reveal-on-scroll"
         aria-labelledby="articles-heading"
       >
         <div className="pillar-articles-header">
@@ -103,7 +103,10 @@ export default async function PillarPage({ params }: PillarPageProps) {
         {taggedStories.length > 0 ? (
           <div className="pillar-articles-grid">
             {taggedStories.map((story) => (
-              <article key={story.slug} className="pillar-article-card">
+              <article
+                key={story.slug}
+                className="pillar-article-card reveal-on-scroll"
+              >
                 <Link
                   href={`/journal/${story.slug}`}
                   className="pillar-article-link"
@@ -146,7 +149,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
             ))}
           </div>
         ) : (
-          <div className="pillar-empty-state">
+          <div className="pillar-empty-state reveal-on-scroll">
             <div className="pillar-empty-icon" aria-hidden="true">
               ✦
             </div>
@@ -166,7 +169,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
 
       {/* Other Pillars Switcher */}
       <section
-        className="pillar-nav-section"
+        className="pillar-nav-section reveal-on-scroll"
         aria-labelledby="other-pillars-heading"
       >
         <div className="section-heading">

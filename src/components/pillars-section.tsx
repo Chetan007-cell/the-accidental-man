@@ -1,9 +1,25 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { getStoriesForPillar, PILLARS } from "@/lib/pillars";
 
 export function PillarsSection() {
+  const [activeFilter, setActiveFilter] = useState<
+    "all" | "active" | "expanding"
+  >("all");
+
+  const displayedPillars = PILLARS.filter((pillar) => {
+    if (activeFilter === "active") return pillar.status === "active";
+    if (activeFilter === "expanding") return pillar.status !== "active";
+    return true;
+  });
+
   return (
-    <section className="pillars-section section-wrap" id="pillars">
+    <section
+      className="pillars-section section-wrap reveal-on-scroll"
+      id="pillars"
+    >
       <div className="section-heading">
         <div>
           <p className="eyebrow">THE CONTENT UNIVERSE</p>
@@ -24,15 +40,56 @@ export function PillarsSection() {
         tagged field notes.
       </p>
 
+      {/* Interactive Pillar Filter Pills */}
+      <div
+        className="pillars-filter-bar"
+        role="tablist"
+        aria-label="Filter pillars by status"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeFilter === "all"}
+          className={`pillars-filter-btn ${
+            activeFilter === "all" ? "active" : ""
+          }`}
+          onClick={() => setActiveFilter("all")}
+        >
+          All 9 Pillars
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeFilter === "active"}
+          className={`pillars-filter-btn ${
+            activeFilter === "active" ? "active" : ""
+          }`}
+          onClick={() => setActiveFilter("active")}
+        >
+          Active in Journal (3)
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeFilter === "expanding"}
+          className={`pillars-filter-btn ${
+            activeFilter === "expanding" ? "active" : ""
+          }`}
+          onClick={() => setActiveFilter("expanding")}
+        >
+          Expanding Soon (6)
+        </button>
+      </div>
+
       <div className="pillars-grid">
-        {PILLARS.map((pillar) => {
+        {displayedPillars.map((pillar) => {
           const taggedStories = getStoriesForPillar(pillar.slug);
           const hasStories = taggedStories.length > 0;
 
           return (
             <article
               key={pillar.number}
-              className={`pillar-card ${
+              className={`pillar-card reveal-on-scroll ${
                 pillar.status === "active"
                   ? "pillar-active"
                   : "pillar-expanding"
@@ -94,7 +151,7 @@ export function PillarsSection() {
         })}
       </div>
 
-      <div className="universe-banner">
+      <div className="universe-banner reveal-on-scroll">
         <div className="universe-banner-copy">
           <p className="eyebrow">A GROWING PLATFORM</p>
           <h3>From foundational essays to a complete modern toolkit.</h3>

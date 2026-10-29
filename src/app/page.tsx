@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   verification: {
+    google: "5LQz6DlaYVLrUCOCzL0HQoCyH04ggj3tDqBzQ3Kpnps",
     other: {
       "p:domain_verify": "da1bc890e12569dbb3642411f9bb2a84",
     },
@@ -86,7 +87,7 @@ export default function HomePage() {
       </section>
 
       {/* Latest Articles Section — Shown Prominently at the Top */}
-      <section className="journal section-wrap" id="journal">
+      <section className="journal section-wrap reveal-on-scroll" id="journal">
         <div className="section-heading">
           <div>
             <p className="eyebrow">LATEST DISPATCHES & ESSAYS</p>
@@ -98,7 +99,7 @@ export default function HomePage() {
         </div>
         <div className="story-grid story-grid-featured">
           {latestStories.map((story) => (
-            <article className="story-card" key={story.slug}>
+            <article className="story-card reveal-on-scroll" key={story.slug}>
               <Link
                 href={`/journal/${story.slug}`}
                 aria-label={`Read ${story.title}`}
@@ -132,7 +133,7 @@ export default function HomePage() {
 
       {/* Foundational Essay Spotlight */}
       {foundationalStory && (
-        <section className="foundational-spotlight section-wrap">
+        <section className="foundational-spotlight section-wrap reveal-on-scroll">
           <div className="foundational-card">
             <div className="foundational-image-wrap">
               <Image
@@ -171,7 +172,7 @@ export default function HomePage() {
       )}
 
       {/* Brand Philosophy: Become, Maintain, Evolve */}
-      <section className="intro section-wrap" id="about">
+      <section className="intro section-wrap reveal-on-scroll" id="about">
         <p className="eyebrow">BRAND PHILOSOPHY</p>
         <h2>
           No finished versions.
@@ -186,7 +187,7 @@ export default function HomePage() {
         </p>
 
         <div className="tenets-grid">
-          <div className="tenet-card">
+          <div className="tenet-card reveal-on-scroll">
             <span className="tenet-num">01</span>
             <h3>Become</h3>
             <p>
@@ -195,7 +196,7 @@ export default function HomePage() {
               where real growth begins.
             </p>
           </div>
-          <div className="tenet-card">
+          <div className="tenet-card reveal-on-scroll">
             <span className="tenet-num">02</span>
             <h3>Maintain</h3>
             <p>
@@ -204,7 +205,7 @@ export default function HomePage() {
               commitments you made.
             </p>
           </div>
-          <div className="tenet-card">
+          <div className="tenet-card reveal-on-scroll">
             <span className="tenet-num">03</span>
             <h3>Evolve</h3>
             <p>
@@ -220,7 +221,7 @@ export default function HomePage() {
       <PillarsSection />
 
       {/* Brand Promise / Editorial Creed */}
-      <section className="creed-section section-wrap">
+      <section className="creed-section section-wrap reveal-on-scroll">
         <div className="creed-card">
           <p className="eyebrow">OUR EDITORIAL COMMITMENT</p>
           <blockquote>
@@ -255,7 +256,7 @@ export default function HomePage() {
       </section>
 
       {/* The Letters / Newsletter */}
-      <section className="newsletter" id="newsletter">
+      <section className="newsletter reveal-on-scroll" id="newsletter">
         <div className="newsletter-copy">
           <p className="eyebrow">A LETTER, NOW AND THEN</p>
           <h2>

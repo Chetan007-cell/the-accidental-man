@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NewsletterForm } from "@/components/newsletter-form";
+import { ReadingProgress } from "@/components/reading-progress";
 import { ShareButton } from "@/components/share-button";
 import { stories } from "@/lib/content";
 import { findPillarBySlug } from "@/lib/pillars";
@@ -51,6 +52,7 @@ export default async function StoryPage({
 
   return (
     <main id="main" className="article-wrap">
+      <ReadingProgress />
       <script type="application/ld+json">
         {JSON.stringify(articleSchema)}
       </script>
@@ -125,7 +127,10 @@ export default async function StoryPage({
         </div>
       </article>
       {stories.filter((item) => item.slug !== story.slug).length > 0 && (
-        <section className="related-articles" aria-labelledby="related-heading">
+        <section
+          className="related-articles reveal-on-scroll"
+          aria-labelledby="related-heading"
+        >
           <div className="related-header">
             <p className="eyebrow">CONTINUE READING</p>
             <h2 id="related-heading">Related Dispatches & Essays</h2>
@@ -134,7 +139,10 @@ export default async function StoryPage({
             {stories
               .filter((item) => item.slug !== story.slug)
               .map((related) => (
-                <article key={related.slug} className="related-card">
+                <article
+                  key={related.slug}
+                  className="related-card reveal-on-scroll"
+                >
                   <Link
                     href={`/journal/${related.slug}`}
                     className="related-card-link"
@@ -168,7 +176,10 @@ export default async function StoryPage({
           </div>
         </section>
       )}
-      <section className="newsletter article-newsletter" id="newsletter">
+      <section
+        className="newsletter article-newsletter reveal-on-scroll"
+        id="newsletter"
+      >
         <div>
           <p className="eyebrow">A LETTER, NOW AND THEN</p>
           <h2>

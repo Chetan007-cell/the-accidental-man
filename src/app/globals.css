@@ -143,7 +143,16 @@ input:focus-visible {
   z-index: 100;
   transition:
     background var(--transition-fast),
-    border-color var(--transition-fast);
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.site-header-scrolled {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 20px -2px rgba(17, 17, 17, 0.06);
+  border-bottom-color: black;
 }
 
 .site-brand {
@@ -269,7 +278,7 @@ input:focus-visible {
 }
 
 .mobile-nav-content {
-  background: var(--paper);
+  background: white;
   border-bottom: 1px solid var(--line);
   padding: 24px max(20px, 6vw) 32px;
   display: flex;
@@ -687,7 +696,7 @@ input:focus-visible {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: black;
-  background: var(--accent-light);
+  background: white;
   border: 1px solid rgba(148, 99, 56, 0.2);
   padding: 4px 10px;
   border-radius: var(--radius-sm);
@@ -947,7 +956,41 @@ input:focus-visible {
   font-size: 16px;
   line-height: 1.75;
   color: var(--ink-secondary);
-  margin: 0 0 44px;
+  margin: 0 0 32px;
+}
+
+.pillars-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 32px;
+  flex-wrap: wrap;
+}
+
+.pillars-filter-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.pillars-filter-btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.pillars-filter-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: white;
 }
 
 .pillars-grid {
@@ -1786,7 +1829,7 @@ input:focus-visible {
 
 .footer-email-link {
   display: inline-block;
-  font-family: var(--sans); 
+  font-family: var(--sans);
   font-size: 15px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.72);
@@ -2610,6 +2653,276 @@ input:focus-visible {
     padding-top: 40px;
     padding-bottom: 32px;
   }
+}
+
+/* ==========================================================================
+   Editorial Scroll Reveals & Hero Entrance
+   ========================================================================== */
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-copy > * {
+  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-copy .eyebrow {
+  animation-delay: 0.08s;
+}
+
+.hero-copy h1 {
+  animation-delay: 0.2s;
+}
+
+.hero-copy .hero-dek {
+  animation-delay: 0.32s;
+}
+
+.hero-copy .hero-actions {
+  animation-delay: 0.44s;
+}
+
+/* Scroll reveal sections default to fully visible so content is NEVER trapped */
+.reveal-on-scroll {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Armed state: applied strictly by JavaScript to elements currently below the viewport */
+.reveal-on-scroll.reveal-init:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Revealed state: triggered smoothly when scrolling into view */
+.reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+/* Card hover elevations - explicitly overriding the resting transform */
+.reveal-on-scroll.story-card:hover,
+.story-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--line-strong);
+  box-shadow: 0 16px 36px -10px rgba(17, 17, 17, 0.12);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+.reveal-on-scroll.pillar-card:hover,
+.pillar-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--line-strong);
+  box-shadow: 0 16px 36px -10px rgba(17, 17, 17, 0.1);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+.reveal-on-scroll.pillar-directory-card:hover,
+.pillar-directory-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--line-strong);
+  box-shadow: 0 18px 40px -12px rgba(17, 17, 17, 0.12);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+.reveal-on-scroll.pillar-article-card:hover,
+.pillar-article-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--line-strong);
+  box-shadow: 0 16px 36px -10px rgba(17, 17, 17, 0.1);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+.reveal-on-scroll.related-card:hover,
+.related-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--line-strong);
+  box-shadow: 0 16px 36px -10px rgba(17, 17, 17, 0.1);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+.reveal-on-scroll.tenet-card:hover,
+.tenet-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--line-strong);
+  box-shadow: 0 14px 30px -8px rgba(17, 17, 17, 0.08);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+/* Page Header Entrances for Editorial and Directory Pages */
+@keyframes pageHeaderFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.journal-header > *,
+.pillars-page-header > *,
+.pillar-hero > *,
+.article-wrap > .eyebrow,
+.article-wrap > h1,
+.article-dek,
+.article-byline,
+.article-hero {
+  animation: pageHeaderFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.journal-header .eyebrow,
+.pillars-page-header .eyebrow,
+.pillar-hero-meta,
+.article-wrap > .eyebrow {
+  animation-delay: 0.06s;
+}
+
+.journal-header .page-title,
+.pillars-page-header .page-title,
+.pillar-hero-title,
+.article-wrap > h1 {
+  animation-delay: 0.16s;
+}
+
+.journal-header .page-intro,
+.pillars-page-header .page-intro,
+.pillar-hero-desc,
+.article-dek {
+  animation-delay: 0.28s;
+}
+
+.pillar-hero-summary,
+.article-byline {
+  animation-delay: 0.38s;
+}
+
+.article-hero {
+  animation-delay: 0.48s;
+}
+
+/* Card Hover Micro-Interactions across Pages */
+.pillar-card .story-arrow,
+.pillar-card .pillar-explore-link span:last-child {
+  display: inline-block;
+  transition: transform var(--transition-smooth);
+}
+
+.pillar-card:hover .story-arrow,
+.pillar-card:hover .pillar-explore-link span:last-child {
+  transform: translate(3px, -2px);
+}
+
+.pillar-directory-card .pillar-story-link .story-arrow {
+  display: inline-block;
+  transition: transform var(--transition-smooth);
+}
+
+.pillar-directory-card:hover .pillar-story-link .story-arrow {
+  transform: translate(3px, -2px);
+}
+
+.tag-pill-link {
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.tag-pill-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.tag-pill-link span[aria-hidden="true"] {
+  display: inline-block;
+  transition: transform var(--transition-fast);
+}
+
+.tag-pill-link:hover span[aria-hidden="true"] {
+  transform: translate(2px, -2px);
+}
+
+.pillar-read-link span[aria-hidden="true"],
+.related-cta span[aria-hidden="true"] {
+  display: inline-block;
+  transition: transform var(--transition-smooth);
+}
+
+.pillar-article-card:hover .pillar-read-link span[aria-hidden="true"],
+.related-card:hover .related-cta span[aria-hidden="true"] {
+  transform: translateX(4px);
+}
+
+.universe-banner,
+.journal-expansion-note,
+.creed-card {
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth);
+}
+
+.universe-banner:hover,
+.journal-expansion-note:hover,
+.creed-card:hover {
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.18);
+}
+
+.prose blockquote {
+  transition:
+    border-left-color var(--transition-smooth),
+    transform var(--transition-smooth);
+}
+
+.prose blockquote:hover {
+  border-left-color: var(--ink);
+  transform: translateX(3px);
+}
+
+.filter-pill:active,
+.pillars-filter-btn:active {
+  transform: scale(0.97);
+}
+
+/* Button micro-interaction: subtle tactile press */
+.button:active {
+  transform: scale(0.985);
 }
 
 /* ==========================================================================

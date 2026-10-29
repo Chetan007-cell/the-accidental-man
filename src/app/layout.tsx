@@ -3,6 +3,7 @@ import { Newsreader, Plus_Jakarta_Sans } from "next/font/google";
 import Link from "next/link";
 import Script from "next/script";
 import { AnalyticsConsent } from "@/components/analytics-consent";
+import { ScrollObserver } from "@/components/scroll-observer";
 import { SiteHeader } from "@/components/site-header";
 import { getOrganizationSchema, getWebsiteSchema } from "@/lib/schema";
 import "./globals.css";
@@ -64,6 +65,7 @@ export const metadata: Metadata = {
     description: "A man isn’t born. He’s built. Notes on becoming.",
   },
   verification: {
+    google: "5LQz6DlaYVLrUCOCzL0HQoCyH04ggj3tDqBzQ3Kpnps",
     other: {
       "p:domain_verify": "da1bc890e12569dbb3642411f9bb2a84",
     },
@@ -126,6 +128,7 @@ export default function RootLayout({
         </script>
       </head>
       <body>
+        <ScrollObserver />
         <a className="skip-link" href="#main">
           Skip to content
         </a>

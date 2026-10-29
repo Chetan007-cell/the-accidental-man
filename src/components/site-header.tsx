@@ -7,7 +7,18 @@ import { useEffect, useState } from "react";
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+
+  // Track scroll state for dynamic header elevation
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 20);
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -54,7 +65,9 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="site-header">
+      <header
+        className={`site-header ${isScrolled ? "site-header-scrolled" : ""}`}
+      >
         <Link href="/" className="site-brand" onClick={() => setIsOpen(false)}>
           <Image
             src="/images/logo-mark.png"

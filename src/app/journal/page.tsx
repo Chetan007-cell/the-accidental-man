@@ -48,7 +48,7 @@ export default function JournalPage() {
       <JournalFeed stories={stories} />
 
       {/* Editorial Expansion Note */}
-      <section className="journal-expansion-note">
+      <section className="journal-expansion-note reveal-on-scroll">
         <div className="expansion-inner">
           <p className="eyebrow">CONTINUOUS WORK</p>
           <h3>Expanding across all nine pillars.</h3>

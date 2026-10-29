@@ -52,7 +52,7 @@ export default function PillarsIndexPage() {
           return (
             <article
               key={pillar.number}
-              className={`pillar-directory-card ${
+              className={`pillar-directory-card reveal-on-scroll ${
                 hasStories ? "card-has-stories" : "card-expanding"
               }`}
             >
