@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getAllStories } from "@/lib/articles";
 import { findPillarBySlug, getStoriesForPillar, PILLARS } from "@/lib/pillars";
 import { getBreadcrumbListSchema } from "@/lib/schema";
 
@@ -47,7 +48,8 @@ export default async function PillarPage({ params }: PillarPageProps) {
     notFound();
   }
 
-  const taggedStories = getStoriesForPillar(pillar.slug);
+  const allStories = await getAllStories();
+  const taggedStories = getStoriesForPillar(pillar.slug, allStories);
 
   const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", item: "/" },
@@ -180,6 +182,27 @@ export default async function PillarPage({ params }: PillarPageProps) {
           <Link href="/pillars" className="button button-outline-dark">
             All 9 Pillars <span>→</span>
           </Link>
+        </div>
+
+        <div className="other-pillars-grid">
+          {PILLARS.filter((p) => p.slug !== pillar.slug).map((other) => {
+            const count = getStoriesForPillar(other.slug, allStories).length;
+            return (
+              <Link
+                key={other.number}
+                href={`/pillars/${other.slug}`}
+                className="other-pillar-pill"
+              >
+                <span className="other-pillar-num">{other.number}</span>
+                <span className="other-pillar-name">{other.name}</span>
+                <span className="other-pillar-count">
+                  {count > 0
+                    ? `${count} ${count === 1 ? "essay" : "essays"}`
+                    : "soon"}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </section>
     </main>

@@ -1960,6 +1960,19 @@ input:focus-visible {
   border-color: var(--ink);
 }
 
+.filter-count {
+  font-size: 10px;
+  font-weight: 700;
+  opacity: 0.75;
+  margin-left: 2px;
+}
+
+.filter-pill-active .filter-count,
+.filter-pill:hover .filter-count {
+  opacity: 1;
+  color: #ffffff;
+}
+
 .journal-expansion-note {
   margin-top: 80px;
   background: var(--dark-bg);

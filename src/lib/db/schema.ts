@@ -1,5 +1,6 @@
 import {
   boolean,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -43,6 +44,11 @@ export const articles = pgTable("articles", {
   status: varchar("status", { length: 20 }).notNull().default("draft"),
   authorName: varchar("author_name", { length: 120 }).notNull(),
   heroImageUrl: text("hero_image_url"),
+  heroImageAlt: text("hero_image_alt").default(""),
+  category: varchar("category", { length: 120 }).default("FOUNDATIONS"),
+  tags: text("tags").default("[]"),
+  readingTimeMinutes: integer("reading_time_minutes").default(5),
+  contentJson: text("content_json").default(""),
   publishedAt: timestamp("published_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

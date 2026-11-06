@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JournalFeed } from "@/components/journal-feed";
-import { stories } from "@/lib/content";
+import { getAllStories } from "@/lib/articles";
 import {
   getBreadcrumbListSchema,
   getJournalCollectionSchema,
@@ -16,7 +16,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function JournalPage() {
+export default async function JournalPage() {
+  const stories = await getAllStories();
   const collectionSchema = getJournalCollectionSchema(stories);
   const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", item: "/" },

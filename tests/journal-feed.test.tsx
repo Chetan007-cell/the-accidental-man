@@ -8,12 +8,12 @@ describe("Button & Filter Functionality: JournalFeed", () => {
   it("renders all category filter buttons and links", () => {
     render(<JournalFeed stories={stories} />);
 
-    expect(screen.getByRole("button", { name: "ALL ESSAYS" })).toBeDefined();
-    expect(screen.getByRole("button", { name: "FOUNDATIONS" })).toBeDefined();
+    expect(screen.getByRole("button", { name: /ALL ESSAYS/i })).toBeDefined();
+    expect(screen.getByRole("button", { name: /FOUNDATIONS/i })).toBeDefined();
     expect(
-      screen.getByRole("button", { name: "MIND & SELF-AWARENESS" }),
+      screen.getByRole("button", { name: /MIND & SELF-AWARENESS/i }),
     ).toBeDefined();
-    expect(screen.getByRole("button", { name: "EMOTIONS" })).toBeDefined();
+    expect(screen.getByRole("button", { name: /EMOTIONS/i })).toBeDefined();
     expect(
       screen.getByRole("link", { name: /explore all nine pillars/i }),
     ).toBeDefined();
@@ -22,7 +22,7 @@ describe("Button & Filter Functionality: JournalFeed", () => {
   it("defaults to ALL ESSAYS filter with all stories visible", () => {
     render(<JournalFeed stories={stories} />);
 
-    const allButton = screen.getByRole("button", { name: "ALL ESSAYS" });
+    const allButton = screen.getByRole("button", { name: /ALL ESSAYS/i });
     expect(allButton.getAttribute("aria-pressed")).toBe("true");
 
     // All stories should be visible
@@ -36,7 +36,7 @@ describe("Button & Filter Functionality: JournalFeed", () => {
 
     // Click FOUNDATIONS button
     const foundationsButton = screen.getByRole("button", {
-      name: "FOUNDATIONS",
+      name: /FOUNDATIONS/i,
     });
     fireEvent.click(foundationsButton);
 
@@ -45,7 +45,7 @@ describe("Button & Filter Functionality: JournalFeed", () => {
 
     // Click MIND & SELF-AWARENESS button
     const mindButton = screen.getByRole("button", {
-      name: "MIND & SELF-AWARENESS",
+      name: /MIND & SELF-AWARENESS/i,
     });
     fireEvent.click(mindButton);
 
@@ -57,7 +57,7 @@ describe("Button & Filter Functionality: JournalFeed", () => {
     ).toBeDefined();
 
     // Click ALL ESSAYS to reset
-    const allButton = screen.getByRole("button", { name: "ALL ESSAYS" });
+    const allButton = screen.getByRole("button", { name: /ALL ESSAYS/i });
     fireEvent.click(allButton);
     expect(allButton.getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByText("A Man Isn’t Born. He’s Built.")).toBeDefined();
@@ -80,5 +80,23 @@ describe("Button & Filter Functionality: JournalFeed", () => {
       });
       expect(link.getAttribute("href")).toBe(`/journal/${story.slug}`);
     }
+  });
+
+  it("displays dynamic story counts on filter buttons that match filtered count exactly", () => {
+    render(<JournalFeed stories={stories} />);
+
+    // All essays button should display (3)
+    const allButton = screen.getByRole("button", { name: /ALL ESSAYS/i });
+    expect(allButton.textContent).toContain("3");
+
+    // Mind button should display (2)
+    const mindButton = screen.getByRole("button", {
+      name: /MIND & SELF-AWARENESS/i,
+    });
+    expect(mindButton.textContent).toContain("2");
+
+    // Body button should display (1)
+    const bodyButton = screen.getByRole("button", { name: /^BODY/i });
+    expect(bodyButton.textContent).toContain("1");
   });
 });

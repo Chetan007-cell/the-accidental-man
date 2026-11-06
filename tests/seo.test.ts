@@ -17,8 +17,8 @@ import sitemap from "@/app/sitemap";
 import { stories } from "@/lib/content";
 
 describe("SEO: Sitemap & Robots", () => {
-  it("should generate sitemap containing home, journal, and all story slugs", () => {
-    const map = sitemap();
+  it("should generate sitemap containing home, journal, and all story slugs", async () => {
+    const map = await sitemap();
     expect(Array.isArray(map)).toBe(true);
 
     const urls = map.map((item) => item.url);

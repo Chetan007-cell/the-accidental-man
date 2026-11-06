@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getAllStories } from "@/lib/articles";
 import { getStoriesForPillar, PILLARS } from "@/lib/pillars";
 import { getBreadcrumbListSchema } from "@/lib/schema";
 
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PillarsIndexPage() {
+export default async function PillarsIndexPage() {
+  const allStories = await getAllStories();
   const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", item: "/" },
     { name: "The 9 Pillars", item: "/pillars" },
@@ -46,8 +48,12 @@ export default function PillarsIndexPage() {
 
       <div className="pillars-page-grid">
         {PILLARS.map((pillar) => {
-          const taggedStories = getStoriesForPillar(pillar.slug);
+          const taggedStories = getStoriesForPillar(pillar.slug, allStories);
           const hasStories = taggedStories.length > 0;
+          const highlightSlug =
+            pillar.highlightStorySlug || taggedStories[0]?.slug;
+          const highlightTitle =
+            pillar.highlightStoryTitle || taggedStories[0]?.title;
 
           return (
             <article
@@ -84,15 +90,13 @@ export default function PillarsIndexPage() {
                     : `Explore ${pillar.name} →`}
                 </Link>
 
-                {pillar.highlightStorySlug && (
+                {hasStories && highlightSlug && (
                   <Link
-                    href={`/journal/${pillar.highlightStorySlug}`}
+                    href={`/journal/${highlightSlug}`}
                     className="pillar-story-link"
                   >
                     <span className="story-arrow">↗</span>
-                    <span className="story-label">
-                      Read: {pillar.highlightStoryTitle}
-                    </span>
+                    <span className="story-label">Read: {highlightTitle}</span>
                   </Link>
                 )}
               </div>

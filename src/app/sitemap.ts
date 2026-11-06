@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { stories } from "@/lib/content";
+import { getAllStories } from "@/lib/articles";
 import { PILLARS } from "@/lib/pillars";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.APP_URL ?? "https://theaccidentalman.com";
+  const stories = await getAllStories();
   return [
     { url: base, changeFrequency: "weekly", priority: 1 },
     { url: `${base}/journal`, changeFrequency: "weekly", priority: 0.8 },

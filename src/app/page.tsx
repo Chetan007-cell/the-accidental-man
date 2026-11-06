@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { PillarsSection } from "@/components/pillars-section";
-import { stories } from "@/lib/content";
+import { getAllStories } from "@/lib/articles";
 import { getHomePageFaqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
@@ -18,16 +18,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  const foundationalStory =
-    stories.find((s) => s.slug === "a-man-isnt-born-hes-built") ?? stories[0];
+export default async function HomePage() {
+  const allStories = await getAllStories();
+  const sortedStories = [...allStories].sort(
+    (a, b) =>
+      new Date(b.publishedAt || b.date).getTime() -
+      new Date(a.publishedAt || a.date).getTime(),
+  );
 
-  const latestStories = [...stories]
-    .sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-    )
-    .slice(0, 2);
+  const foundationalStory =
+    sortedStories.find((s) => s.slug === "a-man-isnt-born-hes-built") ??
+    sortedStories[0];
+
+  const latestStories = sortedStories.slice(0, 2);
 
   return (
     <main id="main">
@@ -218,7 +221,7 @@ export default function HomePage() {
       </section>
 
       {/* The 9 Pillars / Content Universe */}
-      <PillarsSection />
+      <PillarsSection stories={allStories} />
 
       {/* Brand Promise / Editorial Creed */}
       <section className="creed-section section-wrap reveal-on-scroll">

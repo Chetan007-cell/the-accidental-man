@@ -166,11 +166,14 @@ export function findPillarBySlug(
 /**
  * Returns all articles tagged into a specific pillar
  */
-export function getStoriesForPillar(pillarSlugOrName: string): Story[] {
+export function getStoriesForPillar(
+  pillarSlugOrName: string,
+  storySource: Story[] = stories,
+): Story[] {
   const pillar = findPillarBySlug(pillarSlugOrName);
   if (!pillar) return [];
 
-  return stories.filter((story) => {
+  return storySource.filter((story) => {
     // 1. Check highlight slug
     if (pillar.highlightStorySlug && story.slug === pillar.highlightStorySlug) {
       return true;

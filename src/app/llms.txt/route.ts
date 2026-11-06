@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { stories } from "@/lib/content";
+import { getAllStories } from "@/lib/articles";
 
 export const runtime = "nodejs";
 
 export async function GET() {
   const baseUrl = process.env.APP_URL ?? "https://theaccidentalman.com";
+  const allStories = await getAllStories();
 
   const lines = [
     "# The Accidental Man",
@@ -28,7 +29,7 @@ export async function GET() {
     "9. **Life**: Home, time, responsibility, transitions, culture, leisure, and whole living.",
     "",
     "## Flagship Essays & Field Notes",
-    ...stories.map(
+    ...allStories.map(
       (s) =>
         `- [${s.title}](${baseUrl}/journal/${s.slug}): ${s.excerpt} (Category: ${s.category}, ${s.readingTimeMinutes} min read)`,
     ),

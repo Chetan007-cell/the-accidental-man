@@ -16,8 +16,9 @@ import HomePage from "@/app/page";
 import { PillarsSection } from "@/components/pillars-section";
 
 describe("Button & Link Functionality: Homepage CTAs", () => {
-  it("renders hero primary and secondary action buttons", () => {
-    render(<HomePage />);
+  it("renders hero primary and secondary action buttons", async () => {
+    const page = await HomePage();
+    render(page);
 
     const journalCta = screen.getByRole("link", { name: /read the journal/i });
     expect(journalCta.getAttribute("href")).toBe("/journal");
@@ -28,8 +29,9 @@ describe("Button & Link Functionality: Homepage CTAs", () => {
     expect(pillarsCta.getAttribute("href")).toBe("#pillars");
   });
 
-  it("renders foundational essay spotlight button and journal links", () => {
-    render(<HomePage />);
+  it("renders foundational essay spotlight button and journal links", async () => {
+    const page = await HomePage();
+    render(page);
 
     const foundationalEssayBtn = screen.getByRole("link", {
       name: /read the foundational essay/i,
@@ -42,8 +44,9 @@ describe("Button & Link Functionality: Homepage CTAs", () => {
     expect(allStoriesLink.getAttribute("href")).toBe("/journal");
   });
 
-  it("renders only the latest 2 articles in the Fresh from the journal section", () => {
-    const { container } = render(<HomePage />);
+  it("renders only the latest 2 articles in the Fresh from the journal section", async () => {
+    const page = await HomePage();
+    const { container } = render(page);
 
     const featuredGrid = container.querySelector(".story-grid-featured");
     expect(featuredGrid).not.toBeNull();

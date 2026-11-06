@@ -11,11 +11,17 @@ const nextConfig: NextConfig = {
   agentRules: false,
   images: {
     formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
   async headers() {
     return [
       {
-        source: "/images/(.*)",
+        source: "/(images|uploads)/(.*)",
         headers: [
           {
             key: "Cache-Control",
@@ -35,7 +41,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: `default-src 'self'; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; script-src ${scriptPolicy} https://*.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`,
+            value: `default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src ${scriptPolicy} https://*.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`,
           },
         ],
       },

@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import { getStoryBySlug } from "@/lib/articles";
 import { stories } from "@/lib/content";
 import { getDb } from "@/lib/db";
 import { subscribers } from "@/lib/db/schema";
@@ -26,7 +27,9 @@ export async function broadcastBlogPost(
     process.env.NEWSLETTER_FROM_EMAIL ??
     "The Accidental Man <hello@theaccidentalman.com>";
 
-  const story = stories.find((s) => s.slug === articleSlug);
+  const story =
+    (await getStoryBySlug(articleSlug)) ??
+    stories.find((s) => s.slug === articleSlug);
   if (!story) {
     throw new Error(`story_not_found: ${articleSlug}`);
   }

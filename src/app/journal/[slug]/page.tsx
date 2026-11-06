@@ -5,12 +5,14 @@ import { notFound } from "next/navigation";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { ReadingProgress } from "@/components/reading-progress";
 import { ShareButton } from "@/components/share-button";
+import { getAllStories, getStoryBySlug } from "@/lib/articles";
 import { stories } from "@/lib/content";
 import { findPillarBySlug } from "@/lib/pillars";
 import { getArticleSchema, getBreadcrumbListSchema } from "@/lib/schema";
 
-export function generateStaticParams() {
-  return stories.map(({ slug }) => ({ slug }));
+export async function generateStaticParams() {
+  const all = await getAllStories();
+  return all.map(({ slug }) => ({ slug }));
 }
 export async function generateMetadata({
   params,
@@ -18,7 +20,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const story = stories.find((item) => item.slug === slug);
+  const story =
+    (await getStoryBySlug(slug)) ?? stories.find((item) => item.slug === slug);
   if (!story) return {};
   return {
     title: story.title,
@@ -40,8 +43,11 @@ export default async function StoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const story = stories.find((item) => item.slug === slug);
+  const story =
+    (await getStoryBySlug(slug)) ?? stories.find((item) => item.slug === slug);
   if (!story) notFound();
+
+  const allStories = await getAllStories();
 
   const articleSchema = getArticleSchema(story);
   const breadcrumbSchema = getBreadcrumbListSchema([
@@ -126,7 +132,7 @@ export default async function StoryPage({
           <ShareButton title={story.title} />
         </div>
       </article>
-      {stories.filter((item) => item.slug !== story.slug).length > 0 && (
+      {allStories.filter((item) => item.slug !== story.slug).length > 0 && (
         <section
           className="related-articles reveal-on-scroll"
           aria-labelledby="related-heading"
@@ -136,7 +142,7 @@ export default async function StoryPage({
             <h2 id="related-heading">Related Dispatches & Essays</h2>
           </div>
           <div className="related-grid">
-            {stories
+            {allStories
               .filter((item) => item.slug !== story.slug)
               .map((related) => (
                 <article

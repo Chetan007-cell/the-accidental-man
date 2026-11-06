@@ -4,73 +4,101 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { stories as allStories } from "@/lib/content";
+import { findPillarBySlug } from "@/lib/pillars";
 
 type Story = (typeof allStories)[number];
 
-const FILTER_OPTIONS = [
-  { id: "all", label: "ALL ESSAYS" },
-  { id: "foundations", label: "FOUNDATIONS" },
-  { id: "mind", label: "MIND & SELF-AWARENESS" },
-  { id: "body", label: "BODY" },
-  { id: "spirit", label: "SPIRIT & PURPOSE" },
-  { id: "emotions", label: "EMOTIONS" },
-  { id: "pillars", label: "THE 9 PILLARS" },
-];
+function storyMatchesFilter(story: Story, filterId: string): boolean {
+  if (filterId === "all") return true;
+
+  const category = (story.category || "").toUpperCase();
+  const tags = Array.isArray(story.tags)
+    ? story.tags.map((t) => t.toUpperCase())
+    : [];
+
+  if (filterId === "foundations") {
+    return (
+      category.includes("FOUNDATIONS") ||
+      tags.some((t) => t.includes("FOUNDATION"))
+    );
+  }
+
+  const pillar = findPillarBySlug(filterId);
+  if (pillar) {
+    if (pillar.highlightStorySlug && story.slug === pillar.highlightStorySlug) {
+      return true;
+    }
+
+    const matchesPillar = pillar.tagMatches.some((match) => {
+      const matchUpper = match.toUpperCase();
+      return (
+        category.includes(matchUpper) ||
+        tags.some((t) => t.includes(matchUpper) || matchUpper.includes(t))
+      );
+    });
+
+    if (matchesPillar) return true;
+  }
+
+  const upper = filterId.toUpperCase();
+  return category.includes(upper) || tags.some((t) => t.includes(upper));
+}
 
 export function JournalFeed({ stories }: { stories: Story[] }) {
   const [selectedFilter, setSelectedFilter] = useState("all");
 
+  const filterOptions = useMemo(() => {
+    // 1. Primary flagship categories
+    const baseFilters = [
+      { id: "all", label: "ALL ESSAYS" },
+      { id: "foundations", label: "FOUNDATIONS" },
+      { id: "mind", label: "MIND & SELF-AWARENESS" },
+      { id: "body", label: "BODY" },
+      { id: "spirit", label: "SPIRIT & PURPOSE" },
+      { id: "emotions", label: "EMOTIONS" },
+    ];
+
+    // 2. Discover additional active pillar filters (Style, Grooming, Career, Relationships, Life)
+    const otherPillars = [
+      { id: "grooming", label: "GROOMING" },
+      { id: "style", label: "STYLE" },
+      { id: "career-money", label: "CAREER & MONEY" },
+      { id: "relationships", label: "RELATIONSHIPS" },
+      { id: "life", label: "LIFE" },
+    ];
+
+    const activeOtherPillars = otherPillars.filter((p) =>
+      stories.some((s) => storyMatchesFilter(s, p.id)),
+    );
+
+    const allFilters = [...baseFilters, ...activeOtherPillars];
+
+    return allFilters.map((f) => ({
+      ...f,
+      count: stories.filter((s) => storyMatchesFilter(s, f.id)).length,
+    }));
+  }, [stories]);
+
   const filteredStories = useMemo(() => {
-    if (selectedFilter === "all") return stories;
-    if (selectedFilter === "foundations") {
-      return stories.filter((s) =>
-        s.category.toUpperCase().includes("FOUNDATIONS"),
-      );
-    }
-    if (selectedFilter === "mind") {
-      return stories.filter((s) => s.category.toUpperCase().includes("MIND"));
-    }
-    if (selectedFilter === "body") {
-      return stories.filter((s) => s.category.toUpperCase().includes("BODY"));
-    }
-    if (selectedFilter === "spirit") {
-      return stories.filter(
-        (s) =>
-          s.category.toUpperCase().includes("SPIRIT") ||
-          s.category.toUpperCase().includes("PURPOSE"),
-      );
-    }
-    if (selectedFilter === "emotions") {
-      return stories.filter(
-        (s) =>
-          s.category.toUpperCase().includes("EMOTIONS") ||
-          s.slug.includes("built"),
-      );
-    }
-    return stories;
+    const list = stories.filter((s) => storyMatchesFilter(s, selectedFilter));
+
+    // Always sort descending by date (newest first)
+    return [...list].sort((a, b) => {
+      const timeA = new Date(a.publishedAt || a.date).getTime() || 0;
+      const timeB = new Date(b.publishedAt || b.date).getTime() || 0;
+      return timeB - timeA;
+    });
   }, [selectedFilter, stories]);
 
   return (
     <>
-      {/* Category filter buttons */}
+      {/* Category filter buttons with dynamic counts */}
       <nav
         className="journal-filters"
         aria-label="Filter journal stories by pillar"
       >
-        {FILTER_OPTIONS.map((filter) => {
+        {filterOptions.map((filter) => {
           const isActive = selectedFilter === filter.id;
-          if (filter.id === "pillars") {
-            return (
-              <Link
-                key={filter.id}
-                href="/#pillars"
-                className="filter-pill"
-                aria-label="Explore all nine pillars"
-              >
-                {filter.label} <span aria-hidden="true">↗</span>
-              </Link>
-            );
-          }
           return (
             <button
               key={filter.id}
@@ -79,10 +107,19 @@ export function JournalFeed({ stories }: { stories: Story[] }) {
               onClick={() => setSelectedFilter(filter.id)}
               aria-pressed={isActive}
             >
-              {filter.label}
+              <span>{filter.label}</span>
+              <span className="filter-count">({filter.count})</span>
             </button>
           );
         })}
+
+        <Link
+          href="/#pillars"
+          className="filter-pill"
+          aria-label="Explore all nine pillars"
+        >
+          <span>THE 9 PILLARS</span> <span aria-hidden="true">↗</span>
+        </Link>
       </nav>
 
       <section

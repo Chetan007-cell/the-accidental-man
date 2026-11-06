@@ -2,16 +2,28 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import type { Story } from "@/lib/content";
 import { getStoriesForPillar, PILLARS } from "@/lib/pillars";
 
-export function PillarsSection() {
+interface PillarsSectionProps {
+  stories?: Story[];
+}
+
+export function PillarsSection({ stories }: PillarsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<
     "all" | "active" | "expanding"
   >("all");
 
+  const activePillars = PILLARS.filter(
+    (p) => getStoriesForPillar(p.slug, stories).length > 0,
+  );
+  const activeCount = activePillars.length;
+  const expandingCount = PILLARS.length - activeCount;
+
   const displayedPillars = PILLARS.filter((pillar) => {
-    if (activeFilter === "active") return pillar.status === "active";
-    if (activeFilter === "expanding") return pillar.status !== "active";
+    const hasStories = getStoriesForPillar(pillar.slug, stories).length > 0;
+    if (activeFilter === "active") return hasStories;
+    if (activeFilter === "expanding") return !hasStories;
     return true;
   });
 
@@ -66,7 +78,7 @@ export function PillarsSection() {
           }`}
           onClick={() => setActiveFilter("active")}
         >
-          Active in Journal (3)
+          Active in Journal ({activeCount})
         </button>
         <button
           type="button"
@@ -77,22 +89,24 @@ export function PillarsSection() {
           }`}
           onClick={() => setActiveFilter("expanding")}
         >
-          Expanding Soon (6)
+          Expanding Soon ({expandingCount})
         </button>
       </div>
 
       <div className="pillars-grid">
         {displayedPillars.map((pillar) => {
-          const taggedStories = getStoriesForPillar(pillar.slug);
+          const taggedStories = getStoriesForPillar(pillar.slug, stories);
           const hasStories = taggedStories.length > 0;
+          const highlightSlug =
+            pillar.highlightStorySlug || taggedStories[0]?.slug;
+          const highlightTitle =
+            pillar.highlightStoryTitle || taggedStories[0]?.title;
 
           return (
             <article
               key={pillar.number}
               className={`pillar-card reveal-on-scroll ${
-                pillar.status === "active"
-                  ? "pillar-active"
-                  : "pillar-expanding"
+                hasStories ? "pillar-active" : "pillar-expanding"
               }`}
             >
               <div className="pillar-header">
@@ -132,15 +146,15 @@ export function PillarsSection() {
                   </span>
                 </Link>
 
-                {pillar.status === "active" && pillar.highlightStorySlug && (
+                {hasStories && highlightSlug && (
                   <div className="pillar-link-wrap">
                     <Link
-                      href={`/journal/${pillar.highlightStorySlug}`}
+                      href={`/journal/${highlightSlug}`}
                       className="pillar-story-link"
                     >
                       <span className="story-arrow">↗</span>
                       <span className="story-label">
-                        Read: {pillar.highlightStoryTitle}
+                        Read: {highlightTitle}
                       </span>
                     </Link>
                   </div>
