@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { type Story, stories as seedStories } from "@/lib/content";
 import { getDb } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
@@ -242,8 +242,28 @@ export function sortStoriesDescending(list: Story[]): Story[] {
   });
 }
 
+/**
+ * Slugs generated during test runs that must never appear in public feeds or persist in DB.
+ */
+export const KNOWN_TEST_SLUGS = [
+  "latest-breaking-editorial-note",
+  "the-architecture-of-a-tailored-suit",
+  "the-quiet-craftsman",
+  "the-timeless-wardrobe",
+  "visual-presence-and-proportion",
+  "cold-water-and-deep-sleep",
+  "broadcast-integration-test-note",
+  "the-architecture-of-discipline",
+  "the-architecture-of-discipline-revised",
+  "unpublished-private-draft-essay",
+  "unauthorized-test",
+  "unauthorized-edit",
+];
+
 // In-memory cache of stories (starts with seed stories from content.ts, sorted descending)
 const runtimeStories: Story[] = sortStoriesDescending([...seedStories]);
+
+let hasCleanedTestSlugsFromDb = false;
 
 /**
  * Checks whether database queries should be executed.
@@ -263,7 +283,39 @@ export function getSynchronousStories(): Story[] {
 
 export function resetRuntimeStories(): void {
   runtimeStories.length = 0;
-  runtimeStories.push(...sortStoriesDescending([...seedStories]));
+  runtimeStories.push(
+    ...sortStoriesDescending(
+      [...seedStories].filter((s) => !KNOWN_TEST_SLUGS.includes(s.slug)),
+    ),
+  );
+}
+
+/**
+ * Purges any test-generated articles from PostgreSQL.
+ */
+export async function purgeTestArticlesFromDb(): Promise<string[]> {
+  const hasDb = shouldConnectToDb();
+  if (!hasDb) return [];
+
+  try {
+    const database = getDb();
+    const deleted = await database
+      .delete(articles)
+      .where(inArray(articles.slug, KNOWN_TEST_SLUGS))
+      .returning({ slug: articles.slug });
+
+    for (const testSlug of KNOWN_TEST_SLUGS) {
+      const idx = runtimeStories.findIndex((s) => s.slug === testSlug);
+      if (idx >= 0) {
+        runtimeStories.splice(idx, 1);
+      }
+    }
+
+    return deleted.map((d) => d.slug);
+  } catch (err) {
+    console.warn("Could not purge test articles from DB:", err);
+    return [];
+  }
 }
 
 export function registerStoryInMemory(story: Story): void {
@@ -288,13 +340,28 @@ export async function getAllStories(): Promise<Story[]> {
   if (hasDb) {
     try {
       const database = getDb();
+
+      // Automatically purge leftover test articles on server boot / build
+      if (!hasCleanedTestSlugsFromDb) {
+        hasCleanedTestSlugsFromDb = true;
+        try {
+          await database
+            .delete(articles)
+            .where(inArray(articles.slug, KNOWN_TEST_SLUGS));
+        } catch {
+          // ignore error if network momentarily blips
+        }
+      }
+
       const rows = await database
         .select()
         .from(articles)
         .where(eq(articles.status, "published"))
         .orderBy(desc(articles.publishedAt), desc(articles.createdAt));
 
-      const dbStories = rows.map(dbArticleToStory);
+      // Filter out any stray test slugs
+      const cleanRows = rows.filter((r) => !KNOWN_TEST_SLUGS.includes(r.slug));
+      const dbStories = cleanRows.map(dbArticleToStory);
 
       // Merge database stories with seed stories (DB takes priority on matching slug)
       const combined: Story[] = [...dbStories];
