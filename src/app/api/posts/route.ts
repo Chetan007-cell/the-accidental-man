@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { verifyAdminAuth } from "@/lib/api-auth";
 import { createOrUpdateArticle, getAllStories } from "@/lib/articles";
 import { broadcastBlogPost } from "@/lib/email/send-broadcast";
 import { processImageInput } from "@/lib/images";
@@ -45,19 +46,6 @@ const postSchema = z.object({
     .optional(),
 });
 
-function verifyAuth(request: Request): boolean {
-  const adminSecret = process.env.ADMIN_API_KEY ?? process.env.CRON_SECRET;
-  if (!adminSecret) return false;
-
-  const authHeader = request.headers.get("authorization");
-  const apiKeyHeader = request.headers.get("x-api-key");
-
-  if (authHeader === `Bearer ${adminSecret}`) return true;
-  if (apiKeyHeader === adminSecret) return true;
-
-  return false;
-}
-
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -91,7 +79,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!verifyAuth(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json(
       {
         error:

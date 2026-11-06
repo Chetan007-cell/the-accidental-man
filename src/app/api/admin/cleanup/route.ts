@@ -1,25 +1,12 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { verifyAdminAuth } from "@/lib/api-auth";
 import { purgeTestArticlesFromDb, resetRuntimeStories } from "@/lib/articles";
 
 export const runtime = "nodejs";
 
-function checkAuth(request: Request): boolean {
-  const adminSecret = process.env.ADMIN_API_KEY ?? process.env.CRON_SECRET;
-  if (!adminSecret) return false;
-
-  const authHeader = request.headers.get("authorization");
-  const xApiKey = request.headers.get("x-api-key");
-
-  return (
-    authHeader === `Bearer ${adminSecret}` ||
-    authHeader === adminSecret ||
-    xApiKey === adminSecret
-  );
-}
-
 export async function POST(request: Request) {
-  if (!checkAuth(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

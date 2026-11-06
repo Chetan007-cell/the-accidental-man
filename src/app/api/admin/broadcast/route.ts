@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { verifyAdminAuth } from "@/lib/api-auth";
 import { broadcastBlogPost } from "@/lib/email/send-broadcast";
 import { logError } from "@/lib/logger";
 
@@ -10,10 +11,7 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
-  const adminSecret = process.env.ADMIN_API_KEY ?? process.env.CRON_SECRET;
-  const authHeader = request.headers.get("authorization");
-
-  if (!adminSecret || authHeader !== `Bearer ${adminSecret}`) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

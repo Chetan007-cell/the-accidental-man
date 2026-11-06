@@ -1,24 +1,12 @@
 import { NextResponse } from "next/server";
+import { verifyAdminAuth } from "@/lib/api-auth";
 import { processImageInput } from "@/lib/images";
 import { logError } from "@/lib/logger";
 
 export const runtime = "nodejs";
 
-function verifyAuth(request: Request): boolean {
-  const adminSecret = process.env.ADMIN_API_KEY ?? process.env.CRON_SECRET;
-  if (!adminSecret) return false;
-
-  const authHeader = request.headers.get("authorization");
-  const apiKeyHeader = request.headers.get("x-api-key");
-
-  if (authHeader === `Bearer ${adminSecret}`) return true;
-  if (apiKeyHeader === adminSecret) return true;
-
-  return false;
-}
-
 export async function POST(request: Request) {
-  if (!verifyAuth(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json(
       {
         error:

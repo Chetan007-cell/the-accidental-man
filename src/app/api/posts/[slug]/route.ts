@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { verifyAdminAuth } from "@/lib/api-auth";
 import {
   createOrUpdateArticle,
   deleteArticleBySlug,
@@ -8,19 +9,6 @@ import {
 import { logError } from "@/lib/logger";
 
 export const runtime = "nodejs";
-
-function verifyAuth(request: Request): boolean {
-  const adminSecret = process.env.ADMIN_API_KEY ?? process.env.CRON_SECRET;
-  if (!adminSecret) return false;
-
-  const authHeader = request.headers.get("authorization");
-  const apiKeyHeader = request.headers.get("x-api-key");
-
-  if (authHeader === `Bearer ${adminSecret}`) return true;
-  if (apiKeyHeader === adminSecret) return true;
-
-  return false;
-}
 
 export async function GET(
   _request: Request,
@@ -59,7 +47,7 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
-  if (!verifyAuth(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -113,7 +101,7 @@ export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
-  if (!verifyAuth(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
