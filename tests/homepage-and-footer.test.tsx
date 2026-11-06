@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("next/font/google", () => ({
   Newsreader: () => ({ variable: "--font-serif" }),
@@ -14,8 +14,12 @@ vi.mock("next/navigation", () => ({
 import RootLayout from "@/app/layout";
 import HomePage from "@/app/page";
 import { PillarsSection } from "@/components/pillars-section";
+import { resetRuntimeStories } from "@/lib/articles";
 
 describe("Button & Link Functionality: Homepage CTAs", () => {
+  beforeEach(() => {
+    resetRuntimeStories();
+  });
   it("renders hero primary and secondary action buttons", async () => {
     const page = await HomePage();
     render(page);

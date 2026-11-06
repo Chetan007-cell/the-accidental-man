@@ -1,11 +1,15 @@
 // @vitest-environment happy-dom
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import PillarPage from "@/app/pillars/[slug]/page";
 import { PillarsSection } from "@/components/pillars-section";
+import { resetRuntimeStories } from "@/lib/articles";
 import { findPillarBySlug, getStoriesForPillar, PILLARS } from "@/lib/pillars";
 
 describe("Pillars Library & Tagging", () => {
+  beforeEach(() => {
+    resetRuntimeStories();
+  });
   it("should have all 9 defined pillars with valid metadata", () => {
     expect(PILLARS).toHaveLength(9);
     for (const pillar of PILLARS) {
@@ -65,6 +69,9 @@ describe("Pillars Section Links", () => {
 });
 
 describe("Pillar Single Page Component", () => {
+  beforeEach(() => {
+    resetRuntimeStories();
+  });
   it("renders all tagged articles on a pillar page", async () => {
     const pageComponent = await PillarPage({
       params: Promise.resolve({ slug: "mind" }),

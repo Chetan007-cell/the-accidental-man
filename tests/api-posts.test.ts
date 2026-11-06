@@ -1,5 +1,13 @@
 // @vitest-environment happy-dom
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
 // Mock next/cache revalidatePath
 vi.mock("next/cache", () => ({
@@ -22,6 +30,7 @@ import {
   calculateReadingTime,
   getAllStories,
   parseArticleBody,
+  resetRuntimeStories,
   slugify,
 } from "@/lib/articles";
 import { getStoriesForPillar } from "@/lib/pillars";
@@ -90,6 +99,14 @@ It takes shape through repetition.
 
 describe("API: /api/posts and /api/posts/[slug]", () => {
   const secretKey = "test-secret-key-12345";
+
+  beforeAll(() => {
+    resetRuntimeStories();
+  });
+
+  afterAll(() => {
+    resetRuntimeStories();
+  });
 
   beforeEach(() => {
     process.env.ADMIN_API_KEY = secretKey;
@@ -221,7 +238,7 @@ Real progress is rarely dramatic. It is quiet and daily.`,
     expect(data1.post.category).toBe("BODY / VITALITY");
     expect(data1.post.tags).toEqual(["Body", "Vitality"]);
 
-    // 2. Pass only tags: ["Style", "Grooming"]
+    // 2. Pass only tags: ["Style", "Wardrobe"]
     const req2 = new Request("http://localhost:3000/api/posts", {
       method: "POST",
       headers: {
@@ -230,7 +247,7 @@ Real progress is rarely dramatic. It is quiet and daily.`,
       },
       body: JSON.stringify({
         title: "The Timeless Wardrobe",
-        tags: ["Style", "Grooming"],
+        tags: ["Style", "Wardrobe"],
         body: "Dressing well is a form of good manners.",
       }),
     });
@@ -238,8 +255,8 @@ Real progress is rarely dramatic. It is quiet and daily.`,
     const res2 = await createPost(req2);
     expect(res2.status).toBe(201);
     const data2 = await res2.json();
-    expect(data2.post.category).toBe("STYLE / GROOMING");
-    expect(data2.post.tags).toEqual(["Style", "Grooming"]);
+    expect(data2.post.category).toBe("STYLE / WARDROBE");
+    expect(data2.post.tags).toEqual(["Style", "Wardrobe"]);
   });
 
   it("GET /api/posts/[slug] retrieves created post", async () => {

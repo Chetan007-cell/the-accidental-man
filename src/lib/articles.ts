@@ -245,8 +245,25 @@ export function sortStoriesDescending(list: Story[]): Story[] {
 // In-memory cache of stories (starts with seed stories from content.ts, sorted descending)
 const runtimeStories: Story[] = sortStoriesDescending([...seedStories]);
 
+/**
+ * Checks whether database queries should be executed.
+ * In test runners (Vitest / NODE_ENV=test), we bypass external databases
+ * to ensure deterministic, fast, and hermetic tests that never pollute production data.
+ */
+function shouldConnectToDb(): boolean {
+  if (process.env.VITEST || process.env.NODE_ENV === "test") {
+    return false;
+  }
+  return Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+}
+
 export function getSynchronousStories(): Story[] {
   return runtimeStories;
+}
+
+export function resetRuntimeStories(): void {
+  runtimeStories.length = 0;
+  runtimeStories.push(...sortStoriesDescending([...seedStories]));
 }
 
 export function registerStoryInMemory(story: Story): void {
@@ -266,7 +283,7 @@ export function registerStoryInMemory(story: Story): void {
  * Fetch all published stories (PostgreSQL database + seed stories), sorted newest first
  */
 export async function getAllStories(): Promise<Story[]> {
-  const hasDb = Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+  const hasDb = shouldConnectToDb();
 
   if (hasDb) {
     try {
@@ -314,7 +331,7 @@ export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   const inMemory = runtimeStories.find((s) => s.slug === slug);
   if (inMemory) return inMemory;
 
-  const hasDb = Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+  const hasDb = shouldConnectToDb();
   if (hasDb) {
     try {
       const database = getDb();
@@ -436,7 +453,7 @@ export async function createOrUpdateArticle(
   let rowId = `local-${slug}`;
   let isCreated = !runtimeStories.some((s) => s.slug === slug);
 
-  const hasDb = Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+  const hasDb = shouldConnectToDb();
   if (hasDb) {
     try {
       const database = getDb();
@@ -543,7 +560,7 @@ export async function createOrUpdateArticle(
  */
 export async function deleteArticleBySlug(slug: string): Promise<boolean> {
   let dbDeleted = false;
-  const hasDb = Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+  const hasDb = shouldConnectToDb();
 
   if (hasDb) {
     try {
