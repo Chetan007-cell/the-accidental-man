@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:fast": "next build",
     "verify": "npm run lint && npm run typecheck && npm run test",
     "start": "next start",
     "lint": "biome check --write .",

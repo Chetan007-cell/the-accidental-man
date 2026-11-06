@@ -246,6 +246,8 @@ export function sortStoriesDescending(list: Story[]): Story[] {
  * Slugs generated during test runs that must never appear in public feeds or persist in DB.
  */
 export const KNOWN_TEST_SLUGS = [
+  "the-solitary-walk",
+  "strength-in-stillness",
   "latest-breaking-editorial-note",
   "the-architecture-of-a-tailored-suit",
   "the-quiet-craftsman",
