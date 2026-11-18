@@ -18,7 +18,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:watch": "vitest",
-    "audit": "npm audit --audit-level=moderate",
+    "audit": "npm audit --omit=dev --audit-level=moderate",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
@@ -42,7 +42,7 @@
     "drizzle-kit": "^0.31.8",
     "happy-dom": "^21.0.4",
     "typescript": "^5.9.3",
-    "vitest": "^5.0.3"
+    "vitest": "^5.1.1"
   },
   "overrides": {
     "vite": "^6.4.5",
