@@ -246,8 +246,6 @@ export function sortStoriesDescending(list: Story[]): Story[] {
  * Slugs generated during test runs that must never appear in public feeds or persist in DB.
  */
 export const KNOWN_TEST_SLUGS = [
-  "the-solitary-walk",
-  "strength-in-stillness",
   "latest-breaking-editorial-note",
   "the-architecture-of-a-tailored-suit",
   "the-quiet-craftsman",
@@ -260,6 +258,8 @@ export const KNOWN_TEST_SLUGS = [
   "unpublished-private-draft-essay",
   "unauthorized-test",
   "unauthorized-edit",
+  "test-base64-image-post",
+  "test-multipart-image-post",
 ];
 
 // In-memory cache of stories (starts with seed stories from content.ts, sorted descending)

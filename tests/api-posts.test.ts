@@ -343,7 +343,7 @@ Real progress is rarely dramatic. It is quiet and daily.`,
         Authorization: `Bearer ${secretKey}`,
       },
       body: JSON.stringify({
-        title: "The Solitary Walk",
+        title: "Test Base64 Image Post",
         tags: ["Mind", "Nature"],
         image: tinyPngBase64,
         body: "Walking alone with clarity.\n\n## Solitude\nA man needs room to think.",
@@ -355,13 +355,13 @@ Real progress is rarely dramatic. It is quiet and daily.`,
     const data = await response.json();
     expect(data.ok).toBe(true);
     expect(data.post.image).toMatch(
-      /^\/uploads\/the-solitary-walk-\d+-[a-f0-9]+\.png$/,
+      /^\/uploads\/test-base64-image-post-\d+-[a-f0-9]+\.png$/,
     );
   });
 
   it("POST /api/posts accepts multipart/form-data with image file upload", async () => {
     const formData = new FormData();
-    formData.append("title", "Strength in Stillness");
+    formData.append("title", "Test Multipart Image Post");
     formData.append("tags", "Body / Health");
     formData.append(
       "body",
@@ -386,7 +386,7 @@ Real progress is rarely dramatic. It is quiet and daily.`,
     const data = await response.json();
     expect(data.ok).toBe(true);
     expect(data.post.image).toMatch(
-      /^\/uploads\/strength-in-stillness-\d+-[a-f0-9]+\.jpg$/,
+      /^\/uploads\/test-multipart-image-post-\d+-[a-f0-9]+\.jpg$/,
     );
   });
 

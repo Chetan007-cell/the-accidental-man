@@ -1,14 +1,98 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { sql } from "drizzle-orm";
+import { getDb } from "@/lib/db";
 
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
 
 /**
- * Ensures the uploads directory exists on disk.
+ * Persists an uploaded image to PostgreSQL for serverless environments (e.g. Vercel).
+ */
+export async function saveMediaToDb(
+  filename: string,
+  buffer: Buffer,
+  mimeType = "image/jpeg",
+): Promise<boolean> {
+  const isTest = process.env.NODE_ENV === "test" || Boolean(process.env.VITEST);
+  if (isTest) return true;
+
+  const hasDb = Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+  if (!hasDb) return false;
+
+  try {
+    const database = getDb();
+    await database.execute(sql`
+      CREATE TABLE IF NOT EXISTS uploaded_media (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        filename varchar(255) NOT NULL UNIQUE,
+        mime_type varchar(100) NOT NULL DEFAULT 'image/jpeg',
+        data_base64 text NOT NULL,
+        size_bytes integer NOT NULL DEFAULT 0,
+        created_at timestamptz NOT NULL DEFAULT now()
+      );
+    `);
+
+    const dataBase64 = buffer.toString("base64");
+    const sizeBytes = buffer.length;
+
+    await database.execute(sql`
+      INSERT INTO uploaded_media (filename, mime_type, data_base64, size_bytes)
+      VALUES (${filename}, ${mimeType}, ${dataBase64}, ${sizeBytes})
+      ON CONFLICT (filename) DO UPDATE
+      SET data_base64 = EXCLUDED.data_base64,
+          mime_type = EXCLUDED.mime_type,
+          size_bytes = EXCLUDED.size_bytes;
+    `);
+
+    return true;
+  } catch (err) {
+    console.error("Failed to persist media to database:", err);
+    return false;
+  }
+}
+
+/**
+ * Retrieves an uploaded image from PostgreSQL.
+ */
+export async function getMediaFromDb(
+  filename: string,
+): Promise<{ buffer: Buffer; mimeType: string } | null> {
+  const hasDb = Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+  if (!hasDb) return null;
+
+  try {
+    const database = getDb();
+    const result = (await database.execute(sql`
+      SELECT mime_type, data_base64
+      FROM uploaded_media
+      WHERE filename = ${filename}
+      LIMIT 1;
+    `)) as unknown as Array<{ mime_type: string; data_base64: string }>;
+
+    if (!result || result.length === 0) return null;
+
+    const row = result[0];
+    const buffer = Buffer.from(row.data_base64, "base64");
+    return {
+      buffer,
+      mimeType: row.mime_type || "image/jpeg",
+    };
+  } catch (err) {
+    console.error("Failed to retrieve media from database:", err);
+    return null;
+  }
+}
+
+/**
+ * Ensures the uploads directory exists on disk when writable.
  */
 export async function ensureUploadsDir(): Promise<string> {
-  await fs.mkdir(UPLOADS_DIR, { recursive: true });
+  try {
+    await fs.mkdir(UPLOADS_DIR, { recursive: true });
+  } catch {
+    // Expected on serverless environments where root or cwd is read-only
+  }
   return UPLOADS_DIR;
 }
 
@@ -55,25 +139,43 @@ function generateFilename(prefix = "upload", ext = "jpg"): string {
 }
 
 /**
- * Saves a Buffer to public/uploads and returns the public relative URL (/uploads/...).
+ * Saves a Buffer to database and local disk/tmp cache.
+ * Returns the public relative URL (/uploads/...).
  */
 export async function saveBufferToUploads(
   buffer: Buffer,
   filename: string,
+  mimeType = "image/jpeg",
 ): Promise<string> {
   // In test environment, skip writing physical files to disk so test runs stay clean
   if (process.env.NODE_ENV === "test" || process.env.VITEST) {
     return `/uploads/${filename}`;
   }
 
-  await ensureUploadsDir();
-  const filePath = path.join(UPLOADS_DIR, filename);
-  await fs.writeFile(filePath, buffer);
+  // 1. Persist to PostgreSQL (guarantees image survival on serverless / Vercel)
+  await saveMediaToDb(filename, buffer, mimeType);
+
+  // 2. Try writing to public/uploads (local development or containerized environments)
+  try {
+    await fs.mkdir(UPLOADS_DIR, { recursive: true });
+    await fs.writeFile(path.join(UPLOADS_DIR, filename), buffer);
+  } catch (_fsError) {
+    // Serverless runtime (/var/task/public is read-only).
+    // Cache to /tmp for fast warm-lambda reuse
+    try {
+      const tmpDir = path.join("/tmp", "uploads");
+      await fs.mkdir(tmpDir, { recursive: true });
+      await fs.writeFile(path.join(tmpDir, filename), buffer);
+    } catch {
+      // Ignore /tmp error; database persistence is primary
+    }
+  }
+
   return `/uploads/${filename}`;
 }
 
 /**
- * Saves a Web API File (from multipart/form-data) to disk.
+ * Saves a Web API File (from multipart/form-data).
  */
 export async function saveUploadedFile(
   file: File,
@@ -83,11 +185,11 @@ export async function saveUploadedFile(
   const filename = generateFilename(prefix, ext);
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  return saveBufferToUploads(buffer, filename);
+  return saveBufferToUploads(buffer, filename, file.type || `image/${ext}`);
 }
 
 /**
- * Saves a Base64-encoded image string to disk.
+ * Saves a Base64-encoded image string.
  * Supports:
  * - Data URLs: "data:image/png;base64,iVBORw0KGgo..."
  * - Raw base64 string
@@ -99,6 +201,7 @@ export async function saveBase64Image(
   const trimmed = base64String.trim();
 
   let ext = "jpg";
+  let mimeType = "image/jpeg";
   let base64Data = trimmed;
 
   const dataUrlMatch = trimmed.match(
@@ -106,12 +209,13 @@ export async function saveBase64Image(
   );
   if (dataUrlMatch) {
     ext = getExtension(dataUrlMatch[1]);
+    mimeType = `image/${dataUrlMatch[1]}`;
     base64Data = dataUrlMatch[2];
   }
 
   const buffer = Buffer.from(base64Data, "base64");
   const filename = generateFilename(prefix, ext);
-  return saveBufferToUploads(buffer, filename);
+  return saveBufferToUploads(buffer, filename, mimeType);
 }
 
 /**
